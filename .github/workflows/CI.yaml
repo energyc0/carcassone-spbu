@@ -1,14 +1,22 @@
 name: CI
+
 on:
   - push
   - pull_request
+
 jobs:
   CI:
     runs-on: ubuntu-latest
+
     steps:
       - name: Setup checkout
         uses: actions/checkout@v5
-          - name: Build project
-            run: ./gradlew
-          - name: Run detekt
-            run: ./gradlew detekt
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build project
+        run: ./gradlew build
+
+      - name: Run detekt
+        run: ./gradlew detekt

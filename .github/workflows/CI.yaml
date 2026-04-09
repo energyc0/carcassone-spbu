@@ -1,0 +1,14 @@
+name: CI
+on:
+  - push
+  - pull_request
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup checkout
+        uses: actions/checkout@v5
+          - name: Build project
+            run: ./gradlew
+          - name: Run detekt
+            run: ./gradlew detekt

@@ -1,15 +1,17 @@
 package app
 
+import kotlin.random.Random
+
 /*
  * GameState class is responsible for choosing the next player's turn
  * and for player's operations like setting a Meeple and getting score.
  */
 abstract class IGameState (private val players: Array<Player>){
-    private var curPlayerIndex: Int = 0
+    private var curPlayerIndex: Int = Random.nextInt(0, players.size - 1)
 
     private fun findPlayer(color: Color): Player {
         return players.find { it.color == color } ?: throw NoSuchElementException("There is no player with such color.")
-    }
+    }   
 
     fun nextTurn() {
         curPlayerIndex = (curPlayerIndex + 1) % players.size

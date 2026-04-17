@@ -13,17 +13,32 @@ enum class TileAreaDir { CORNER_TOP_LEFT, TOP_LEFT, TOP, TOP_RIGHT, CORNER_TOP_R
  * TileLook is a class that is responsible for
  * tile appearance in the game.
  */
-class TileLook (private val areas: Array<TileArea>, val rotation: Rotation){
+class TileLook (private val areas: Array<TileArea>){
+    var rotation = Rotation.STRAIGHT
+        private set
+
     init {
         require(areas.size == TileAreaDir.entries.size) {"Tile must contain ${TileAreaDir.entries.size} TileArea\'s"}
-        // Rotate the data
-        TODO("Rotate the data.")
+    }
+    fun setRotation(rot: Rotation) {
+        rotation = rot
     }
     fun setMeeple(m: Meeple, tileAreaDir: TileAreaDir) {
-        TODO("Set Meeple")
+        val dir = rotDir(tileAreaDir)
+        areas[dir.ordinal].setMeeple(m)
     }
 
     fun getDrawData() {
         TODO("Need to implement GUI.")
+    }
+
+    private fun rotDir(dir: TileAreaDir) : TileAreaDir{
+        TODO("Rotate map.")
+        return when (rotation) {
+            Rotation.STRAIGHT -> dir
+            Rotation.RIGHT -> dir
+            Rotation.LEFT -> dir
+            Rotation.FLIPPED -> dir
+        }
     }
 }

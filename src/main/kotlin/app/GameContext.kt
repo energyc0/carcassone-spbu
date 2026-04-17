@@ -12,7 +12,7 @@ class GameContext (playerInitializer: IPlayersInitializer, tilesLoader: IGameTil
         board = GameBoard(gameRules)
     }
 
-    fun nextTurn() {
+    fun gameplay() {
         TODO("Not implemented.")
     }
 }

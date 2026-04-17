@@ -1,6 +1,6 @@
 package app
 
-class PlayersInitializer (gameRules: IGameRules, tilesLoader: IGameTilesLoader) : IPlayersInitializer {
+class PlayersInitializer () : IPlayersInitializer {
     private fun collectPlayerInfo() : Player? {
         println("Write player's name: ")
         val name = readlnOrNull() ?: return null

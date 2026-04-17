@@ -98,7 +98,7 @@
         <mxCell id="91_2dOaoeyWvixUECwqI-10" value="GameContext" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="220" y="145" width="230" height="140" as="geometry" />
         </mxCell>
-        <mxCell id="91_2dOaoeyWvixUECwqI-11" value="&lt;div&gt;- gameState: GameState&lt;/div&gt;&lt;div&gt;- deck: Deck&lt;/div&gt;&lt;div&gt;- board: GameBoard&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="91_2dOaoeyWvixUECwqI-10" vertex="1">
+        <mxCell id="91_2dOaoeyWvixUECwqI-11" value="&lt;div&gt;- gameState: IGameState&lt;/div&gt;&lt;div&gt;- deck: Deck&lt;/div&gt;&lt;div&gt;- board: GameBoard&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="91_2dOaoeyWvixUECwqI-10" vertex="1">
           <mxGeometry y="26" width="230" height="64" as="geometry" />
         </mxCell>
         <mxCell id="91_2dOaoeyWvixUECwqI-12" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="91_2dOaoeyWvixUECwqI-10" vertex="1">
@@ -539,6 +539,12 @@
         </mxCell>
         <mxCell id="UarcYKm9eE-Qy8roD2r2-7" value="+ nextTurn()&lt;div&gt;+ getPlayerScore()&lt;/div&gt;&lt;div&gt;+ getPlayerName()&lt;/div&gt;&lt;div&gt;+ getPlayerColor()&lt;/div&gt;&lt;div&gt;+ addPlayerScore()&lt;/div&gt;&lt;div&gt;+ setPlayerMeeple()&lt;/div&gt;&lt;div&gt;+ unsetPlayerMeeple()&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="UarcYKm9eE-Qy8roD2r2-4">
           <mxGeometry y="98" width="160" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="UarcYKm9eE-Qy8roD2r2-9" value="&lt;div&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;«interface»&lt;/span&gt;&lt;/div&gt;IGameInitializer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="815" y="-340" width="170" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="UarcYKm9eE-Qy8roD2r2-10" value="&lt;div&gt;+ countTurnScore()&lt;/div&gt;&lt;div&gt;+ countFinalScore()&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="UarcYKm9eE-Qy8roD2r2-9">
+          <mxGeometry y="50" width="170" height="44" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

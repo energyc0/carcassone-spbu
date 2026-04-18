@@ -6,30 +6,30 @@ import kotlin.random.Random
  * GameState class is responsible for choosing the next player's turn
  * and for player's operations like setting a Meeple and getting score.
  */
-abstract class IGameState (private val players: Array<Player>){
+abstract class IGameState(
+    private val players: Array<Player>,
+) {
     private var curPlayerIndex: Int = Random.nextInt(0, players.size - 1)
 
-    private fun findPlayer(color: Color): Player {
-        return players.find { it.color == color } ?: throw NoSuchElementException("There is no player with such color.")
-    }   
+    private fun findPlayer(color: Color): Player =
+        players.find {
+            it.color == color
+        } ?: throw NoSuchElementException("There is no player with such color.")
 
     fun nextTurn() {
         curPlayerIndex = (curPlayerIndex + 1) % players.size
     }
 
-    fun getPlayerScore(): Int {
-        return players[curPlayerIndex].score
-    }
+    fun getPlayerScore(): Int = players[curPlayerIndex].score
 
-    fun getPlayerName(): String {
-        return players[curPlayerIndex].name
-    }
+    fun getPlayerName(): String = players[curPlayerIndex].name
 
-    fun getPlayerColor(): Color {
-        return players[curPlayerIndex].color
-    }
+    fun getPlayerColor(): Color = players[curPlayerIndex].color
 
-    fun addPlayerScore(color: Color, score: Int) {
+    fun addPlayerScore(
+        color: Color,
+        score: Int,
+    ) {
         findPlayer(color).addScore(score)
     }
 
@@ -39,5 +39,6 @@ abstract class IGameState (private val players: Array<Player>){
 
     fun unsetPlayerMeeple(color: Color) {
         TODO("Need to implement a board.")
+        color
     }
 }

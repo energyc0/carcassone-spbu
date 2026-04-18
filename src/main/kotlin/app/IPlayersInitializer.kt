@@ -1,5 +1,5 @@
 package app
 
 interface IPlayersInitializer {
-    fun collectPlayers() : Array<Player>
+    fun collectPlayers(): Array<Player>
 }

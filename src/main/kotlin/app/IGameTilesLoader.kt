@@ -1,5 +1,5 @@
 package app
 
 interface IGameTilesLoader {
-    fun loadTiles() : MutableList<Tile>
+    fun loadTiles(): MutableList<Tile>
 }

@@ -1,6 +1,10 @@
 package app
 
-class GameContext (playerInitializer: IPlayersInitializer, tilesLoader: IGameTilesLoader, gameRules: IGameRules){
+class GameContext(
+    playerInitializer: IPlayersInitializer,
+    tilesLoader: IGameTilesLoader,
+    gameRules: IGameRules,
+) {
     private val gameState: IGameState
     private val deck: Deck
     private val board: GameBoard

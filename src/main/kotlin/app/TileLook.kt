@@ -57,6 +57,21 @@ class TileLook(
         TODO("Need to implement GUI.")
     }
 
+    fun getArea(dir: TileAreaDir) : TileArea {
+        val curDir = rotDir(dir)
+        return areas[curDir.ordinal]
+    }
+/*
+    fun areaHasMeeple(dir: TileAreaDir) : Boolean {
+        val curDir = rotDir(dir)
+        return areas[curDir.ordinal].hasMeeple()
+    }
+
+    fun areaSetMeeple(dir: TileAreaDir, meeple: Meeple) {
+        val curDir = rotDir(dir)
+        areas[curDir.ordinal].setMeeple(meeple)
+    }
+*/
     private fun rotDir(dir: TileAreaDir): TileAreaDir {
         TODO("Rotate map.")
         return when (rotation) {

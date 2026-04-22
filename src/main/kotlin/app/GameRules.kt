@@ -29,9 +29,14 @@ class GameRules : IGameRules {
         }
 
         for ((i, dir) in tileEdge.withIndex()) {
-            if (tile.getTileArea(dir).type != to.getTileArea(toTileEdge[i]).type)
+            if (tile.getTileAreaType(dir) != to.getTileAreaType(toTileEdge[i]))
                 return false
         }
         return true
     }
+
+    private fun canBeConnected(edge1 : Array<TileAreaType>, edge2 : Array<TileAreaType>): Boolean {
+        return edge1 contentEquals edge2
+    }
+
 }

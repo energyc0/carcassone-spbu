@@ -10,6 +10,7 @@ abstract class IGameState(
     private val players: Array<Player>,
 ) {
     private var curPlayerIndex: Int = Random.nextInt(0, players.size - 1)
+    private var curPlayer: Player = players[curPlayerIndex]
 
     private fun findPlayer(color: Color): Player =
         players.find {
@@ -33,12 +34,7 @@ abstract class IGameState(
         findPlayer(color).addScore(score)
     }
 
-    fun setPlayerMeeple() {
-        TODO("Need to implement a board.")
-    }
-
-    fun unsetPlayerMeeple(color: Color) {
-        TODO("Need to implement a board.")
-        color
+    fun setPlayerMeeple(tile: Tile, tileAreaDir: TileAreaDir) {
+        curPlayer.setMeeple(tile, tileAreaDir)
     }
 }

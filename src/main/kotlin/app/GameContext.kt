@@ -16,7 +16,22 @@ class GameContext(
         board = GameBoard(gameRules)
     }
 
-    fun gameplay() {
-        TODO("Not implemented.")
+    fun gameplay(turnSuggester: ITurnSuggester, gui : IGUIManager, playerController: IPlayerController, scoreCounter : IScoreCounter) {
+        while (deck.hasNextTile()) {
+            val tile = deck.getNextTile()
+            val variants = turnSuggester.suggestTurn(tile, board)
+
+            if (variants.isEmpty()) {
+                deck.tileSetBack(tile)
+                continue
+            }
+
+            gameState.nextTurn()
+            gui.drawUI()
+            playerController.processInput()
+            val score = scoreCounter.countScore()
+
+            gui.drawTiles()
+        }
     }
 }

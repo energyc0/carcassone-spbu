@@ -1,6 +1,8 @@
 package app
 
-enum class Direction { UP, RIGHT, LEFT, DOWN }
+enum class Direction {
+    UP, LEFT, DOWN, RIGHT
+}
 
 interface IGameRules {
     fun canConnect(
@@ -8,4 +10,5 @@ interface IGameRules {
         to: Tile,
         from: Direction,
     ): Boolean
+
 }

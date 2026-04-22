@@ -47,4 +47,6 @@ class GameBoard(
     }
 
     fun getTile(coordinate: Coordinate): Tile? = boardTiles[coordinate]
+
+    fun getFreeSpace() : List<Coordinate> = freeSpace.getSpace()
 }

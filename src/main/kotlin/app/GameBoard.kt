@@ -4,22 +4,20 @@ class GameBoard(
     private val gameRules: IGameRules,
 ) {
     private val boardTiles = mutableMapOf<Coordinate, Tile>()
+    private val freeSpace = FreeSpace()
 
     fun insertTile(
         newTile: Tile,
         coordinate: Coordinate,
     ) {
-        if (boardTiles.isEmpty()) {
+        if (!freeSpace.hasSpace(coordinate))
+            throw IllegalArgumentException("Cannot insert the tile there.")
+        /* Edge case */
+        if (freeSpace.hasSpace(Coordinate(0,0))) {
             boardTiles[coordinate] = newTile
+            freeSpace.takeSpace(coordinate)
             return
         }
-        val adjacentCoords =
-            arrayOf<Coordinate>(
-                Coordinate(coordinate.x, coordinate.y + 1),
-                Coordinate(coordinate.x, coordinate.y - 1),
-                Coordinate(coordinate.x + 1, coordinate.y),
-                Coordinate(coordinate.x - 1, coordinate.y),
-            )
 
         val adjacentDirs =
             arrayOf<Direction>(
@@ -29,8 +27,9 @@ class GameBoard(
                 Direction.LEFT,
             )
 
+        val adjacentCoords = coordinate.getAdjacent()
         if (boardTiles[coordinate] != null ||
-            adjacentCoords.fold(true) { acc, cord -> acc && (boardTiles[cord] == null) }
+            adjacentCoords.all { freeSpace.hasSpace(it) }
         ) {
             throw IllegalArgumentException("Cannot insert the tile there.")
         }
@@ -43,6 +42,8 @@ class GameBoard(
                 throw IllegalArgumentException("Cannot insert the tile there.")
             }
         }
+        boardTiles[coordinate] = newTile
+        freeSpace.takeSpace(coordinate)
     }
 
     fun getTile(coordinate: Coordinate): Tile? = boardTiles[coordinate]

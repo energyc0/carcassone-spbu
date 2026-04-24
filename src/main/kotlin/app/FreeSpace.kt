@@ -5,22 +5,21 @@ package app
  * Improves algorithms efficiency.
  */
 class FreeSpace {
-    private val freeSpace = mutableSetOf(Coordinate(0,0))
-    private val takenSpace = mutableSetOf<Coordinate>()
+    private val freeSpace = mutableSetOf(Vec2(0, 0))
+    private val takenSpace = mutableSetOf<Vec2>()
 
-    fun hasSpace(cord: Coordinate) : Boolean {
-        return freeSpace.contains(cord)
-    }
+    fun hasSpace(cord: Vec2): Boolean = freeSpace.contains(cord)
 
-    fun takeSpace(cord: Coordinate) {
-        if (!hasSpace(cord))
+    fun takeSpace(cord: Vec2) {
+        if (!hasSpace(cord)) {
             throw IllegalArgumentException("There is no space to take.")
+        }
 
-        /* Add adjacent coordinates to freeSpace and delete the given coordinate */
+        // Add adjacent coordinates to freeSpace and delete the given coordinate
         cord.getAdjacent().forEach { adj -> if (!takenSpace.contains(adj)) freeSpace.add(adj) }
         takenSpace.add(cord)
         freeSpace.remove(cord)
     }
 
-    fun getSpace() : List<Coordinate> = freeSpace.toList()
+    fun getSpace(): List<Vec2> = freeSpace.toList()
 }

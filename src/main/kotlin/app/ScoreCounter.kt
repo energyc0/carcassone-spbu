@@ -1,7 +1,11 @@
 package app
 
 class ScoreCounter : IScoreCounter {
-    private fun countScoreObject(cord: TileCoordinate, startObj : GameObject, board: IGameBoardReadObject) : MutableMap<Color, Int> {
+    private fun countScoreObject(
+        cord: TileCoordinate,
+        startObj: GameObject,
+        board: IGameBoardReadObject,
+    ): MutableMap<Color, Int> {
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(cord))
 
@@ -11,27 +15,35 @@ class ScoreCounter : IScoreCounter {
             visited.add(curCoord)
 
             val curObj = board.getObject(curCoord) ?: continue
-            if (!startObj.canBeBuilt(curObj))
+            if (!startObj.canBeBuilt(curObj)) {
                 return mutableMapOf<Color, Int>()
+            }
 
-            curCoord.getAdjacent().forEach { i->
-                if (!visited.contains(i))
+            curCoord.getAdjacent().forEach { i ->
+                if (!visited.contains(i)) {
                     toVisit.addLast(i)
+                }
             }
         }
 
         return startObj.getScore()
     }
 
-    override fun countScore(lastCoord : Vec2, board: IGameBoardReadObject) : Map<Color, Int> {
+    override fun countScore(
+        lastCoord: Vec2,
+        board: IGameBoardReadObject,
+    ): Map<Color, Int> {
         val visitedObj = mutableSetOf<GameObject>()
         var result = mutableMapOf<Color, Int>()
-        for (x in 0..TILE_AREA_SAMPLES_ROW) {
-            for (y in 0..TILE_AREA_SAMPLES_COLUMN) {
-                val tileCoordinate = TileCoordinate(lastCoord, AreaCoordinate(x,y))
-                val obj = board.getObject(tileCoordinate) ?: throw IllegalStateException("Board cannot contain empty elements.")
-                if (visitedObj.contains(obj))
+        for (x in 0..TILE_AREA_SAMPLES) {
+            for (y in 0..TILE_AREA_SAMPLES) {
+                val tileCoordinate = TileCoordinate(lastCoord, AreaCoordinate(x, y))
+                val obj =
+                    board.getObject(tileCoordinate)
+                        ?: throw IllegalStateException("Board cannot contain empty elements.")
+                if (visitedObj.contains(obj)) {
                     continue
+                }
                 visitedObj.add(obj)
                 result = mergeColorIntMaps(result, countScoreObject(tileCoordinate, obj, board))
             }
@@ -39,7 +51,7 @@ class ScoreCounter : IScoreCounter {
         return result
     }
 
-    override fun countFinalScore() : Map<Color, Int> {
+    override fun countFinalScore(): Map<Color, Int> {
         TODO("Not implemented.")
     }
 }

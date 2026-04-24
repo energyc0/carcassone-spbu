@@ -8,9 +8,7 @@ class Player(
 ) {
     private val meeple: Array<Meeple> = Array(MEEPLE_COUNT) { Meeple(color) }
 
-    private fun findFreeMeeple() : Meeple? {
-        return meeple.find { !it.isOnBoard() }
-    }
+    private fun findFreeMeeple(): Meeple? = meeple.find { !it.isOnBoard() }
 
     var score: Int = 0
         private set
@@ -19,7 +17,10 @@ class Player(
         score += sc
     }
 
-    fun setMeeple(tile: Tile, area: TileAreaDir) {
+    fun setMeeple(
+        tile: Tile,
+        area: Vec2,
+    ) {
         val meep = findFreeMeeple() ?: throw IllegalStateException("Player has not any meeple to use.")
         tile.setMeeple(meep, area)
     }

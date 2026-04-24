@@ -1,7 +1,10 @@
 package app
 
 enum class Direction {
-    UP, LEFT, DOWN, RIGHT
+    UP,
+    LEFT,
+    DOWN,
+    RIGHT,
 }
 
 interface IGameRules {
@@ -10,5 +13,4 @@ interface IGameRules {
         to: Tile,
         from: Direction,
     ): Boolean
-
 }

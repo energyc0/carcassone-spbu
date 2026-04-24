@@ -1,23 +1,34 @@
 package app
 
-class TurnSuggester(rules: IGameRules) : ITurnSuggester(rules) {
-    private fun canBeConnected(tile: Tile, to: Tile, from: Direction) : Boolean{
+class TurnSuggester(
+    rules: IGameRules,
+) : ITurnSuggester(rules) {
+    private fun canBeConnected(
+        tile: Tile,
+        to: Tile,
+        from: Direction,
+    ): Boolean {
         val toEdge = to.getTileEdges()[from.ordinal]
         val tileEdges = tile.getTileEdges()
 
-        return tileEdges.any { it contentEquals toEdge}
+        return tileEdges.any { it contentEquals toEdge }
     }
 
-    private fun hasPossibleConnection(tile: Tile, cord: Vec2, board: IGameBoardReadTile) : Boolean {
+    private fun hasPossibleConnection(
+        tile: Tile,
+        cord: Vec2,
+        board: IGameBoardReadTile,
+    ): Boolean {
         val adjCords = cord.getAdjacent()
         val adjTiles = mutableListOf<Tile>()
 
         adjCords.forEach {
             val temp = board.getTile(it)
-            if(temp != null) adjTiles.add(temp)
+            if (temp != null) adjTiles.add(temp)
         }
-        if (adjTiles.isEmpty())
+        if (adjTiles.isEmpty()) {
             throw IllegalStateException("There must be at least one adjacent tile.")
+        }
 
         return adjTiles.any {
             val toCords = it.coords ?: throw IllegalStateException("Tile in the board must have coordinates.")
@@ -26,7 +37,10 @@ class TurnSuggester(rules: IGameRules) : ITurnSuggester(rules) {
         }
     }
 
-    override fun suggestTurn(tile: Tile, board: IGameBoardReadTile) : List<Vec2> {
+    override fun suggestTurn(
+        tile: Tile,
+        board: IGameBoardReadTile,
+    ): List<Vec2> {
         val space = board.getFreeSpace()
 
         val suggest = mutableListOf<Vec2>()

@@ -1,5 +1,6 @@
 package app
 
 interface IPlayerController {
-    fun processInput()
+    // Return the coordinate of the placed tile
+    fun placeTile(): Vec2
 }

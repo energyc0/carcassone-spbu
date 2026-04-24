@@ -1,7 +1,5 @@
 package app
 
-import java.awt.geom.Area
-
 enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
 
 /*
@@ -26,17 +24,16 @@ class TileLook(
         TODO("Need to implement GUI.")
     }
 
-    fun getArea(cord: AreaCoordinate) : TileAreaType {
+    fun getArea(cord: AreaCoordinate): TileAreaType {
         val curCord = rotateCord(cord)
         return areas[countCordIdx(curCord)]
     }
 
-    private fun countCordIdx(cord: AreaCoordinate) : Int {
-        return cord.y * TILE_AREA_SAMPLES_ROW + cord.x
-    }
+    private fun countCordIdx(cord: AreaCoordinate): Int = cord.y * TILE_AREA_SAMPLES + cord.x
+
     private fun rotateCord(cord: AreaCoordinate): AreaCoordinate {
-        val maxX = TILE_AREA_SAMPLES_ROW - 1
-        val maxY = TILE_AREA_SAMPLES_COLUMN - 1
+        val maxX = TILE_AREA_SAMPLES - 1
+        val maxY = TILE_AREA_SAMPLES - 1
         return when (rotation) {
             Rotation.STRAIGHT -> cord
             Rotation.FLIPPED -> AreaCoordinate(maxX - cord.x, maxY - cord.y)

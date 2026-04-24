@@ -7,7 +7,7 @@ class GameContext(
 ) {
     private val gameState: IGameState
     private val deck: Deck
-    private val board: GameBoard
+    private val board: IGameBoardReadWrite
 
     init {
         val players = playerInitializer.collectPlayers()
@@ -16,7 +16,12 @@ class GameContext(
         board = GameBoard(gameRules)
     }
 
-    fun gameplay(turnSuggester: ITurnSuggester, gui : IGUIManager, playerController: IPlayerController, scoreCounter : IScoreCounter) {
+    fun gameplay(
+        turnSuggester: ITurnSuggester,
+        gui: IGUIManager,
+        playerController: IPlayerController,
+        scoreCounter: IScoreCounter,
+    ) {
         while (deck.hasNextTile()) {
             val tile = deck.getNextTile()
             val variants = turnSuggester.suggestTurn(tile, board)
@@ -28,8 +33,9 @@ class GameContext(
 
             gameState.nextTurn()
             gui.drawUI()
-            playerController.processInput()
-            val score = scoreCounter.countScore()
+            val tileCoord = playerController.placeTile()
+            val score = scoreCounter.countScore(tileCoord, board)
+            gameState.addPlayerScore(score)
 
             gui.drawTiles()
         }

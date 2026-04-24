@@ -27,13 +27,14 @@ abstract class IGameState(
 
     fun getPlayerColor(): Color = players[curPlayerIndex].color
 
-    fun addPlayerScore(
-        scores:MutableMap<Color, Int>
-    ) {
-        scores.forEach { i -> findPlayer(i.key).addScore(i.value)}
+    fun addPlayerScore(scores: Map<Color, Int>) {
+        scores.forEach { i -> findPlayer(i.key).addScore(i.value) }
     }
 
-    fun setPlayerMeeple(tile: Tile, cord: Vec2) {
+    fun setPlayerMeeple(
+        tile: Tile,
+        cord: Vec2,
+    ) {
         curPlayer.setMeeple(tile, cord)
     }
 }

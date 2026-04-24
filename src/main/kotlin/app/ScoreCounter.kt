@@ -1,28 +1,42 @@
 package app
 
-import java.util.Deque
-import kotlin.collections.setOf
-
 class ScoreCounter : IScoreCounter {
-    private fun getAdjacentCoord(cord :Pair<Coordinate, TileAreaDir>) : Pair<Coordinate, TileAreaDir> {
+    private fun countScoreObject(cord: TileCoordinate, startObj : GameObject, board: IGameBoardReadObject) : MutableMap<Color, Int> {
+        val visited = mutableSetOf<TileCoordinate>()
+        val toVisit = ArrayDeque(listOf(cord))
 
-    }
+        val result = mutableMapOf<Color, Int>()
+        while (toVisit.isNotEmpty()) {
+            val curCoord = toVisit.removeFirst()
+            visited.add(curCoord)
 
-    private fun countScoreObject(cord: Coordinate, board: GameBoard, dir: TileAreaDir, visited: MutableSet<Pair<Coordinate, TileAreaDir>>) : Map<Color, Int> {
-        visited.add(Pair(cord, dir))
+            val curObj = board.getObject(curCoord) ?: continue
+            if (!startObj.canBeBuilt(curObj))
+                return mutableMapOf<Color, Int>()
 
-
-    }
-
-    override fun countScore(lastTile : Tile, board: GameBoard) : Map<Color, Int> {
-        val visited = mutableSetOf<Pair<Coordinate, TileAreaDir>>()
-        val cord = lastTile.coords ?: throw IllegalStateException("Tile in the board must have coordinates.")
-        for (dir in TileAreaDir.entries) {
-            val area = lastTile.getTileArea(dir)
-            if (!visited.contains(Pair(cord, area))) {
-                countScoreObject(cord, board, dir, visited)
+            curCoord.getAdjacent().forEach { i->
+                if (!visited.contains(i))
+                    toVisit.addLast(i)
             }
         }
+
+        return startObj.getScore()
+    }
+
+    override fun countScore(lastCoord : Vec2, board: IGameBoardReadObject) : Map<Color, Int> {
+        val visitedObj = mutableSetOf<GameObject>()
+        var result = mutableMapOf<Color, Int>()
+        for (x in 0..TILE_AREA_SAMPLES_ROW) {
+            for (y in 0..TILE_AREA_SAMPLES_COLUMN) {
+                val tileCoordinate = TileCoordinate(lastCoord, AreaCoordinate(x,y))
+                val obj = board.getObject(tileCoordinate) ?: throw IllegalStateException("Board cannot contain empty elements.")
+                if (visitedObj.contains(obj))
+                    continue
+                visitedObj.add(obj)
+                result = mergeColorIntMaps(result, countScoreObject(tileCoordinate, obj, board))
+            }
+        }
+        return result
     }
 
     override fun countFinalScore() : Map<Color, Int> {

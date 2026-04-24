@@ -1,84 +1,47 @@
 package app
 
-enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
+import java.awt.geom.Area
 
-// TileArea indices to access elements of TileLook
-enum class TileAreaDir {
-    CORNER_TOP_LEFT,
-    TOP_LEFT,
-    TOP,
-    TOP_RIGHT,
-    CORNER_TOP_RIGHT,
-    LEFT_TOP,
-    CENTER_TOP,
-    RIGHT_TOP,
-    LEFT,
-    CENTER_LEFT,
-    CENTER,
-    CENTER_RIGHT,
-    RIGHT,
-    LEFT_BOTTOM,
-    CENTER_BOTTOM,
-    RIGHT_BOTTOM,
-    CORNER_BOTTOM_LEFT,
-    BOTTOM_LEFT,
-    BOTTOM,
-    BOTTOM_RIGHT,
-    CORNER_BOTTOM_RIGHT,
-}
+enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
 
 /*
  * TileLook is a class that is responsible for
  * tile appearance in the game.
  */
 class TileLook(
-    private val areas: Array<TileArea>,
+    private val areas: Array<TileAreaType>,
 ) {
     var rotation = Rotation.STRAIGHT
         private set
 
     init {
-        require(areas.size == TileAreaDir.entries.size) { "Tile must contain ${TileAreaDir.entries.size} TileArea\'s" }
+        require(areas.size == TILE_AREA_SAMPLES_TOTAL) { "Tile must contain ${TILE_AREA_SAMPLES_TOTAL} TileArea\'s" }
     }
 
     fun setRotation(rot: Rotation) {
         rotation = rot
     }
 
-    fun setMeeple(
-        m: Meeple,
-        tileAreaDir: TileAreaDir,
-    ) {
-        val dir = rotDir(tileAreaDir)
-        areas[dir.ordinal].setMeeple(m)
-    }
-
     fun getDrawData() {
         TODO("Need to implement GUI.")
     }
 
-    fun getArea(dir: TileAreaDir) : TileArea {
-        val curDir = rotDir(dir)
-        return areas[curDir.ordinal]
-    }
-/*
-    fun areaHasMeeple(dir: TileAreaDir) : Boolean {
-        val curDir = rotDir(dir)
-        return areas[curDir.ordinal].hasMeeple()
+    fun getArea(cord: AreaCoordinate) : TileAreaType {
+        val curCord = rotateCord(cord)
+        return areas[countCordIdx(curCord)]
     }
 
-    fun areaSetMeeple(dir: TileAreaDir, meeple: Meeple) {
-        val curDir = rotDir(dir)
-        areas[curDir.ordinal].setMeeple(meeple)
+    private fun countCordIdx(cord: AreaCoordinate) : Int {
+        return cord.y * TILE_AREA_SAMPLES_ROW + cord.x
     }
-*/
-    private fun rotDir(dir: TileAreaDir): TileAreaDir {
-        TODO("Rotate map.")
+    private fun rotateCord(cord: AreaCoordinate): AreaCoordinate {
+        val maxX = TILE_AREA_SAMPLES_ROW - 1
+        val maxY = TILE_AREA_SAMPLES_COLUMN - 1
         return when (rotation) {
-            Rotation.STRAIGHT -> dir
-            Rotation.RIGHT -> dir
-            Rotation.LEFT -> dir
-            Rotation.FLIPPED -> dir
+            Rotation.STRAIGHT -> cord
+            Rotation.FLIPPED -> AreaCoordinate(maxX - cord.x, maxY - cord.y)
+            Rotation.LEFT -> AreaCoordinate(cord.y, maxY - cord.x)
+            Rotation.RIGHT -> AreaCoordinate(maxX - cord.y, cord.x)
         }
     }
 }

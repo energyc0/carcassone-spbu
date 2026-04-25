@@ -6,6 +6,6 @@ abstract class ITurnSuggester(
     // Suggest where to place the given tile
     abstract fun suggestTurn(
         tile: Tile,
-        board: IGameBoardReadTile,
+        board: IGameBoardReadTileSpace,
     ): List<Vec2>
 }

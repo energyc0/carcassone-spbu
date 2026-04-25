@@ -39,7 +39,7 @@ class TurnSuggester(
 
     override fun suggestTurn(
         tile: Tile,
-        board: IGameBoardReadTile,
+        board: IGameBoardReadTileSpace,
     ): List<Vec2> {
         val space = board.getFreeSpace()
 

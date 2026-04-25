@@ -7,8 +7,8 @@ interface IScoreCounter {
     // lastTile must be in the board
     fun countScore(
         lastCoord: Vec2,
-        board: IGameBoardReadObject,
+        board: IGameBoardReadForCounter,
     ): Map<Color, Int>
 
-    fun countFinalScore(): Map<Color, Int>
+    fun countFinalScore(board: IGameBoardReadForCounter): Map<Color, Int>
 }

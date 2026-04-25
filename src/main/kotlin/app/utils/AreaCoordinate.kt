@@ -1,4 +1,6 @@
-package app
+package app.utils
+
+import app.services.Direction
 
 const val TILE_AREA_SAMPLES = 5
 const val TILE_AREA_SAMPLES_TOTAL = TILE_AREA_SAMPLES * TILE_AREA_SAMPLES

@@ -1,4 +1,8 @@
-package app
+package app.services
+
+import app.context.PLAYER_COUNT
+import app.entities.Color
+import app.entities.Player
 
 class PlayersInitializer : IPlayersInitializer {
     private fun collectPlayerInfo(): Player? {

@@ -1,5 +1,8 @@
-package app
+package app.entities
 
+import app.context.IGameBoardReadForObject
+import app.utils.TileCoordinate
+import app.utils.Vec2
 import kotlin.collections.mutableMapOf
 
 enum class GameObjectType { FIELD, CITY, MONASTERY, ROAD, CROSSROAD }

@@ -1,7 +1,6 @@
 package app.services
 
-import app.IGameTilesLoader
-import app.Tile
+import app.entities.Tile
 
 class GameTilesLoader : IGameTilesLoader {
     override fun loadTiles(): MutableList<Tile> {

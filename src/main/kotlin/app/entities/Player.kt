@@ -1,4 +1,4 @@
-package app
+package app.entities
 
 const val MEEPLE_COUNT = 8
 

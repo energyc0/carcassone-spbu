@@ -1,4 +1,12 @@
-package app
+package app.context
+
+import app.entities.GameObject
+import app.entities.GameObjectDummy
+import app.entities.GameObjectType
+import app.entities.Meeple
+import app.entities.Tile
+import app.utils.TileCoordinate
+import app.utils.Vec2
 
 interface IGameBoardReadObject {
     fun getObject(coord: TileCoordinate): GameObject?

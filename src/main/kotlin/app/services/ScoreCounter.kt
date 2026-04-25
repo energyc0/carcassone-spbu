@@ -1,4 +1,12 @@
-package app
+package app.services
+
+import app.context.IGameBoardReadForCounter
+import app.entities.Color
+import app.entities.GameObject
+import app.utils.AreaCoordinate
+import app.utils.TILE_AREA_SAMPLES
+import app.utils.TileCoordinate
+import app.utils.Vec2
 
 /*
  * Merge two maps and sum up their values.

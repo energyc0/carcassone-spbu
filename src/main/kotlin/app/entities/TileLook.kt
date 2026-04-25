@@ -1,4 +1,8 @@
-package app
+package app.entities
+
+import app.utils.AreaCoordinate
+import app.utils.TILE_AREA_SAMPLES
+import app.utils.TILE_AREA_SAMPLES_TOTAL
 
 enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
 

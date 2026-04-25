@@ -1,4 +1,5 @@
-package app
+package app.context
+import app.entities.Tile
 import kotlin.random.Random
 
 const val TILES_DECK_COUNT = 72

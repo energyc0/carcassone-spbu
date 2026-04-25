@@ -1,4 +1,6 @@
-package app
+package app.services
+
+import app.entities.Tile
 
 enum class Direction {
     UP,

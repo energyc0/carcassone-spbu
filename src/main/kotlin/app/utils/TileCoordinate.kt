@@ -1,4 +1,6 @@
-package app
+package app.utils
+
+import app.services.Direction
 
 /*
  * TileCoordinate is a class that contains two coordinates: GameBoard coordinate and AreaCoordinate.

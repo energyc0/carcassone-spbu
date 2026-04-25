@@ -1,4 +1,6 @@
-package app
+package app.services
+
+import app.utils.Vec2
 
 interface IPlayerController {
     // Return the coordinate of the placed tile

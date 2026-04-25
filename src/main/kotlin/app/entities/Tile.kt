@@ -1,4 +1,12 @@
-package app
+package app.entities
+
+import app.utils.AreaCoordinate
+import app.utils.TILE_AREA_SAMPLES
+import app.utils.Vec2
+import app.utils.bottomCoordinates
+import app.utils.leftCoordinates
+import app.utils.rightCoordinates
+import app.utils.topCoordinates
 
 class Tile(
     val isStarting: Boolean,

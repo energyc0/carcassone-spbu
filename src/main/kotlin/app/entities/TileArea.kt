@@ -1,4 +1,4 @@
-package app
+package app.entities
 
 /*
  * TileArea is an abstract part of a whole tile.

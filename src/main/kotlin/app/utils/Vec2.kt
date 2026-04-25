@@ -1,4 +1,6 @@
-package app
+package app.utils
+
+import app.services.Direction
 
 data class Vec2(
     val x: Int,

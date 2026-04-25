@@ -1,4 +1,11 @@
-package app
+package app.services
+
+import app.entities.GameObjectType
+import app.entities.Tile
+import app.utils.bottomCoordinates
+import app.utils.leftCoordinates
+import app.utils.rightCoordinates
+import app.utils.topCoordinates
 
 class GameRules : IGameRules {
     override fun canConnect(

@@ -1,17 +1,12 @@
 package app.context
 
-import app.Deck
-import app.GameBoard
-import app.GameState
-import app.IGUIManager
-import app.IGameBoardReadWrite
-import app.IGameRules
-import app.IGameState
-import app.IGameTilesLoader
-import app.IPlayerController
-import app.IPlayersInitializer
-import app.IScoreCounter
-import app.ITurnSuggester
+import app.gui.IGUIManager
+import app.services.IGameRules
+import app.services.IGameTilesLoader
+import app.services.IPlayerController
+import app.services.IPlayersInitializer
+import app.services.IScoreCounter
+import app.services.ITurnSuggester
 
 class GameContext(
     playerInitializer: IPlayersInitializer,

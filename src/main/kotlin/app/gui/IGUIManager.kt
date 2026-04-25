@@ -1,4 +1,4 @@
-package app
+package app.gui
 
 interface IGUIManager {
     fun drawTiles()

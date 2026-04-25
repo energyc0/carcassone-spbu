@@ -1,4 +1,6 @@
-package app
+package app.context
+
+import app.entities.Player
 
 const val PLAYER_COUNT = 5
 

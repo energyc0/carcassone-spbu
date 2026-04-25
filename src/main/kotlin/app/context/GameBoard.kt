@@ -1,4 +1,16 @@
-package app
+package app.context
+
+import app.entities.GameObject
+import app.entities.GameObjectDummy
+import app.entities.GameObjectFactory
+import app.entities.GameObjectType
+import app.entities.Meeple
+import app.entities.Tile
+import app.services.IGameRules
+import app.utils.AreaCoordinate
+import app.utils.TILE_AREA_SAMPLES
+import app.utils.TileCoordinate
+import app.utils.Vec2
 
 data class TileCoordinateData(
     val tile: Tile,

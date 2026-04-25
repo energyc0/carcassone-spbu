@@ -1,4 +1,6 @@
-package app
+package app.entities
+
+import app.utils.TileCoordinate
 
 enum class Color { RED, GREEN, BLUE, YELLOW, BLACK }
 

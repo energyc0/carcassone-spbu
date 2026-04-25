@@ -1,8 +1,8 @@
 package app.context
 
-import app.Color
-import app.Meeple
-import app.Player
+import app.entities.Color
+import app.entities.Meeple
+import app.entities.Player
 import kotlin.random.Random
 
 /*

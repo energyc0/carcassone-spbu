@@ -7,7 +7,7 @@ enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
  * tile appearance in the game.
  */
 class TileLook(
-    private val areas: Array<TileAreaType>,
+    private val areas: Array<GameObjectType>,
 ) {
     var rotation = Rotation.STRAIGHT
         private set
@@ -24,7 +24,7 @@ class TileLook(
         TODO("Need to implement GUI.")
     }
 
-    fun getArea(cord: AreaCoordinate): TileAreaType {
+    fun getArea(cord: AreaCoordinate): GameObjectType {
         val curCord = rotateCord(cord)
         return areas[countCordIdx(curCord)]
     }

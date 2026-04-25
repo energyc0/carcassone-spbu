@@ -31,10 +31,5 @@ abstract class IGameState(
         scores.forEach { i -> findPlayer(i.key).addScore(i.value) }
     }
 
-    fun setPlayerMeeple(
-        tile: Tile,
-        cord: Vec2,
-    ) {
-        curPlayer.setMeeple(tile, cord)
-    }
+    fun findPlayerMeeple(): Meeple? = curPlayer.findFreeMeeple()
 }

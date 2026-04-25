@@ -1,39 +1,8 @@
 package app
 
-/*
- * Merge two maps and sum up their values.
- */
-fun mergeColorIntMaps(
-    a: MutableMap<Color, Int>,
-    b: MutableMap<Color, Int>,
-): MutableMap<Color, Int> =
-    (a.keys + b.keys)
-        .associateWith { key ->
-            a.getOrDefault(key, 0) + b.getOrDefault(key, 0)
-        }.toMutableMap()
-
-interface IGameBoardReadObject {
-    fun getObject(coord: TileCoordinate): GameObject?
-}
-
-interface IGameBoardReadTile {
-    fun getTile(coord: Vec2): Tile?
-
-    fun getFreeSpace(): List<Vec2>
-}
-
-interface IGameBoardReadWrite :
-    IGameBoardReadObject,
-    IGameBoardReadTile {
-    fun insertTile(
-        newTile: Tile,
-        coordinate: Vec2,
-    )
-}
-
 data class TileCoordinateData(
     val tile: Tile,
-    val objects: MutableMap<AreaCoordinate, GameObject>,
+    val objects: MutableMap<AreaCoordinate, GameObjectDummy>,
 )
 
 class GameBoard(
@@ -47,23 +16,25 @@ class GameBoard(
      */
     private fun mergeObjects(startCoord: TileCoordinate): GameObject {
         val startObject =
-            gameObjects[startCoord.tileCoord]?.objects[startCoord.areaCoord]
-                ?: throw IllegalStateException("Game object table corruption")
+            (
+                gameObjects[startCoord.tileCoord]?.objects[startCoord.areaCoord]
+                    ?: throw IllegalStateException("Game object table corruption")
+            ) as GameObject
         val objectType = startObject.type
-        var totalMeeple = startObject.meepleCount
-        val visited = mutableSetOf(startCoord)
-        val toVisit = Direction.entries.map { dir -> startCoord.getAdjacent(dir) }.toCollection(ArrayDeque())
+        val totalMeeple = startObject.meeple
+        val visited = mutableSetOf<TileCoordinate>()
+        val toVisit = ArrayDeque(listOf(startCoord))
         val objectSet = mutableSetOf(startObject)
 
         val resultObject = GameObjectFactory().createObject(objectType)
         while (toVisit.isNotEmpty()) {
             val curCoord = toVisit.removeFirst()
             visited.add(curCoord)
-            val curObject = gameObjects[curCoord.tileCoord]?.objects[curCoord.areaCoord] ?: continue
+            val curObject = (gameObjects[curCoord.tileCoord]?.objects[curCoord.areaCoord] ?: continue) as GameObject
             if (curObject.type == objectType) {
                 if (!objectSet.contains(curObject)) {
                     objectSet.add(curObject)
-                    totalMeeple = mergeColorIntMaps(totalMeeple, curObject.meepleCount)
+                    totalMeeple.addAll(curObject.meeple)
                 }
                 curCoord.getAdjacent().forEach { i ->
                     if (!visited.contains(i)) {
@@ -74,27 +45,8 @@ class GameBoard(
             }
         }
 
-        resultObject.meepleCount = totalMeeple
+        resultObject.meeple = totalMeeple
         return resultObject
-    }
-
-    /*
-     * Get the list of coordinates of existing adjacent tiles.
-     */
-    private fun getAdjacentTiles(coord: Vec2): List<Vec2> {
-        val ret = mutableListOf<Vec2>()
-        coord.getAdjacent().forEach { i -> if (gameObjects[i] != null) ret.add(i) }
-        return ret.toList()
-    }
-
-    private fun takeSpace(cord: Vec2) {
-        if (!freeSpace.contains(cord)) {
-            throw IllegalArgumentException("There is no space to take.")
-        }
-
-        // Add adjacent coordinates to freeSpace and delete the given coordinate
-        cord.getAdjacent().forEach { adj -> if (!gameObjects.contains(adj)) freeSpace.add(adj) }
-        freeSpace.remove(cord)
     }
 
     /*
@@ -124,27 +76,25 @@ class GameBoard(
         return adj.last()
     }
 
-    private fun tileAreaTypeToObject(type: TileAreaType): GameObjectType? =
-        when (type) {
-            TileAreaType.CITY -> GameObjectType.CITY
-            TileAreaType.FIELD -> GameObjectType.FIELD
-            TileAreaType.MONASTERY -> GameObjectType.MONASTERY
-            TileAreaType.ROAD -> GameObjectType.ROAD
-            TileAreaType.CROSSROAD -> null
-        }
-
     private fun addNewTile(
         newTile: Tile,
         coordinate: Vec2,
     ) {
-        takeSpace(coordinate)
-        val tileObjects = mutableMapOf<AreaCoordinate, GameObject>()
+        val tileObjects = mutableMapOf<AreaCoordinate, GameObjectDummy>()
         gameObjects[coordinate] = TileCoordinateData(newTile, tileObjects)
+        if (!freeSpace.contains(coordinate)) {
+            throw IllegalArgumentException("There is no space to take.")
+        }
+
+        // Add adjacent coordinates to freeSpace and delete the given coordinate
+        coordinate.getAdjacent().forEach { adj -> if (!gameObjects.contains(adj)) freeSpace.add(adj) }
+        freeSpace.remove(coordinate)
+
         for (x in 0..<TILE_AREA_SAMPLES) {
             for (y in 0..<TILE_AREA_SAMPLES) {
                 val areaCoord = AreaCoordinate(x, y)
                 val tileCoordinate = TileCoordinate(coordinate, areaCoord)
-                val type = tileAreaTypeToObject(newTile.getTileArea(areaCoord)) ?: continue
+                val type = newTile.getTileArea(areaCoord)
                 tileObjects[areaCoord] = findParentObject(type, tileCoordinate)
             }
         }
@@ -154,7 +104,7 @@ class GameBoard(
         newTile: Tile,
         coordinate: Vec2,
     ): Boolean {
-        val adjacentTiles = getAdjacentTiles(coordinate)
+        val adjacentTiles = coordinate.getAdjacent().filter { gameObjects[it] != null }
         return (
             freeSpace.contains(coordinate) &&
                 adjacentTiles.all { curCoord ->
@@ -165,6 +115,17 @@ class GameBoard(
                     gameRules.canConnect(newTile, toTile, dir)
                 }
         )
+    }
+
+    override fun setMeeple(
+        m: Meeple,
+        coord: TileCoordinate,
+    ) {
+        val obj = getObject(coord) ?: throw IllegalArgumentException("There is no tile.")
+        if (obj.hasMeeple()) {
+            throw IllegalArgumentException("Object already has meeple")
+        }
+        obj.addMeep(m)
     }
 
     override fun insertTile(
@@ -188,5 +149,9 @@ class GameBoard(
 
     override fun getFreeSpace(): List<Vec2> = freeSpace.toList()
 
-    override fun getObject(coord: TileCoordinate): GameObject? = gameObjects[coord.tileCoord]?.objects[coord.areaCoord]
+    override fun getObject(coord: TileCoordinate): GameObject? = getObjectDummy(coord) as GameObject?
+
+    override fun getObjectDummy(coord: TileCoordinate): GameObjectDummy? = gameObjects[coord.tileCoord]?.objects[coord.areaCoord]
+
+    override fun getObjectType(coord: TileCoordinate): GameObjectType? = getObjectDummy(coord)?.type
 }

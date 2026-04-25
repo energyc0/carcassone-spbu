@@ -8,22 +8,16 @@ enum class Color { RED, GREEN, BLUE, YELLOW, BLACK }
 class Meeple(
     val color: Color,
 ) {
-    private var coord: Vec2? = null
-    private var area: Vec2? = null
+    private var coord: TileCoordinate? = null
 
     fun isOnBoard(): Boolean = coord != null
 
     fun returnToPlayer() {
         check(!isOnBoard()) { "Meeple is on board." }
         coord = null
-        area = null
     }
 
-    fun setArea(
-        coords: Vec2,
-        tileArea: Vec2,
-    ) {
+    fun setArea(coords: TileCoordinate) {
         coord = coords
-        area = tileArea
     }
 }

@@ -1,7 +1,8 @@
 package app
 
 fun main() {
-    val gameContext = GameContext(PlayersInitializer(), GameTilesLoader(), GameRules())
+    val gameRules = GameRules()
+    val gameContext = GameContext(PlayersInitializer(), GameTilesLoader(), gameRules)
 
-    gameContext.gameplay()
+    gameContext.gameplay(TurnSuggester(gameRules), GUIManager(), PlayerController(), ScoreCounter())
 }

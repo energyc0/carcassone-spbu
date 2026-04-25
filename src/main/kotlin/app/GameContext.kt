@@ -34,6 +34,7 @@ class GameContext(
             gameState.nextTurn()
             gui.drawUI()
             val tileCoord = playerController.placeTile()
+            board.insertTile(tile, tileCoord)
             val score = scoreCounter.countScore(tileCoord, board)
             gameState.addPlayerScore(score)
 

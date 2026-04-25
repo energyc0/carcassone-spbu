@@ -1,5 +1,17 @@
 package app
 
+/*
+ * Merge two maps and sum up their values.
+ */
+fun mergeColorIntMaps(
+    a: MutableMap<Color, Int>,
+    b: MutableMap<Color, Int>,
+): MutableMap<Color, Int> =
+    (a.keys + b.keys)
+        .associateWith { key ->
+            a.getOrDefault(key, 0) + b.getOrDefault(key, 0)
+        }.toMutableMap()
+
 class ScoreCounter : IScoreCounter {
     override fun countScore(
         lastCoord: Vec2,
@@ -23,8 +35,13 @@ class ScoreCounter : IScoreCounter {
         return result
     }
 
-    /* Count score for one tile */
-    private fun countFinalScoreTile(coord : Vec2, visitedObj : MutableSet<GameObject>, result : MutableMap<Color, Int>,board: IGameBoardReadForCounter) {
+    // Count score for one tile
+    private fun countFinalScoreTile(
+        coord: Vec2,
+        visitedObj: MutableSet<GameObject>,
+        result: MutableMap<Color, Int>,
+        board: IGameBoardReadForCounter,
+    ) {
         for (x in 0..TILE_AREA_SAMPLES) {
             for (y in 0..TILE_AREA_SAMPLES) {
                 val tileCoordinate = TileCoordinate(coord, AreaCoordinate(x, y))
@@ -35,7 +52,7 @@ class ScoreCounter : IScoreCounter {
                     continue
                 }
                 visitedObj.add(obj)
-                /* Copy new data into result variable */
+                // Copy new data into result variable
                 mergeColorIntMaps(result, obj.getFinalScore(tileCoordinate, board)).forEach { (color, score) ->
                     result[color] = score
                 }
@@ -43,11 +60,11 @@ class ScoreCounter : IScoreCounter {
         }
     }
 
-    /* Check every tile and count score for objects */
+    // Check every tile and count score for objects
     override fun countFinalScore(board: IGameBoardReadForCounter): Map<Color, Int> {
         val visitedObj = mutableSetOf<GameObject>()
         val visitedTiles = mutableSetOf<Vec2>()
-        val toVisit = ArrayDeque(listOf(Vec2(0,0)))
+        val toVisit = ArrayDeque(listOf(Vec2(0, 0)))
         val result = mutableMapOf<Color, Int>()
 
         while (toVisit.isNotEmpty()) {
@@ -56,9 +73,10 @@ class ScoreCounter : IScoreCounter {
             if (board.getTile(curCoord) == null) continue
             countFinalScoreTile(curCoord, visitedObj, result, board)
 
-            curCoord.getAdjacent().forEach { i->
-                if (!visitedTiles.contains(i))
+            curCoord.getAdjacent().forEach { i ->
+                if (!visitedTiles.contains(i)) {
                     toVisit.addLast(i)
+                }
             }
         }
         return result.toMap()

@@ -22,7 +22,7 @@ class GameRules : IGameRules {
             }
 
         for ((i, dir) in tileEdge.withIndex()) {
-            if (tile.getTileArea(dir).type != to.getTileArea(toTileEdge[i]).type) {
+            if (tile.getTileArea(dir) != to.getTileArea(toTileEdge[i])) {
                 return false
             }
         }
@@ -30,7 +30,7 @@ class GameRules : IGameRules {
     }
 
     private fun canBeConnected(
-        edge1: Array<TileAreaType>,
-        edge2: Array<TileAreaType>,
+        edge1: Array<GameObjectType>,
+        edge2: Array<GameObjectType>,
     ): Boolean = edge1 contentEquals edge2
 }

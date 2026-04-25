@@ -1,4 +1,12 @@
-package app
+package app.gui
+
+import app.Direction
+import app.IGameBoardReadTile
+import app.IGameBoardReadTileSpace
+import app.IGameRules
+import app.ITurnSuggester
+import app.Tile
+import app.Vec2
 
 class TurnSuggester(
     rules: IGameRules,

@@ -1,5 +1,8 @@
-package app
+package app.context
 
+import app.Color
+import app.Meeple
+import app.Player
 import kotlin.random.Random
 
 /*

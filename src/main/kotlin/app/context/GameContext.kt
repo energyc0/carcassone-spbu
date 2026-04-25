@@ -1,4 +1,17 @@
-package app
+package app.context
+
+import app.Deck
+import app.GameBoard
+import app.GameState
+import app.IGUIManager
+import app.IGameBoardReadWrite
+import app.IGameRules
+import app.IGameState
+import app.IGameTilesLoader
+import app.IPlayerController
+import app.IPlayersInitializer
+import app.IScoreCounter
+import app.ITurnSuggester
 
 class GameContext(
     playerInitializer: IPlayersInitializer,

@@ -47,6 +47,9 @@ class TurnSuggester(
         board: IGameBoardReadTileSpace,
     ): List<Vec2> {
         val space = board.getFreeSpace()
+        /* Edge case. Starting tile has no adjacent tiles. */
+        if (space.size == 1 && space[0] == Vec2(0,0))
+            return space
 
         val suggest = mutableListOf<Vec2>()
 

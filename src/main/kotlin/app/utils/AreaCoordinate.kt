@@ -1,6 +1,7 @@
 package app.utils
 
 import app.services.Direction
+import java.awt.geom.Area
 
 const val TILE_AREA_SAMPLES = 5
 const val TILE_AREA_SAMPLES_TOTAL = TILE_AREA_SAMPLES * TILE_AREA_SAMPLES
@@ -14,6 +15,10 @@ class AreaCoordinate(
     coordX: Int,
     coordY: Int,
 ) {
+    override fun equals(other: Any?): Boolean {
+        return this === other || (other is AreaCoordinate && other.x == this.x && other.y == this.y)
+    }
+
     val x = Math.floorMod(coordX, TILE_AREA_SAMPLES)
     val y = Math.floorMod(coordY, TILE_AREA_SAMPLES)
 

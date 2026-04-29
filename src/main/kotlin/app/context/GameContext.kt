@@ -1,5 +1,6 @@
 package app.context
 
+import app.entities.Player
 import app.gui.IGUIManager
 import app.services.IGameRules
 import app.services.IGameTilesLoader
@@ -8,21 +9,17 @@ import app.services.IPlayersInitializer
 import app.services.IScoreCounter
 import app.services.ITurnSuggester
 
+/*
+ * Main game class. Can throw IllegalStateArgumentException during initialization.
+ */
 class GameContext(
-    playerInitializer: IPlayersInitializer,
+    players : Array<Player>,
     tilesLoader: IGameTilesLoader,
     gameRules: IGameRules,
 ) {
-    private val gameState: IGameState
-    private val deck: Deck
-    private val board: IGameBoardReadWrite
-
-    init {
-        val players = playerInitializer.collectPlayers()
-        gameState = GameState(players)
-        deck = Deck(tilesLoader.loadTiles())
-        board = GameBoard(gameRules)
-    }
+    private val gameState: IGameState = GameState(players)
+    private val deck: Deck = Deck(tilesLoader.loadTiles())
+    private val board: IGameBoardReadWrite = GameBoard(gameRules)
 
     fun gameplay(
         turnSuggester: ITurnSuggester,

@@ -38,7 +38,7 @@ val topCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordin
 val bottomCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordinate(i, TILE_AREA_SAMPLES - 1) }
 
 // Left edge from top to bottom.
-val leftCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordinate(0, i) }
+val leftCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordinate(0, TILE_AREA_SAMPLES - i - 1) }
 
 // Right edge from top to bottom.
-val rightCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordinate(TILE_AREA_SAMPLES - 1, i) }
+val rightCoordinates = Array<AreaCoordinate>(TILE_AREA_SAMPLES) { i -> AreaCoordinate(TILE_AREA_SAMPLES - 1, TILE_AREA_SAMPLES - i - 1) }

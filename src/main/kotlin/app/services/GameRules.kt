@@ -13,27 +13,7 @@ class GameRules : IGameRules {
         to: Tile,
         from: Direction,
     ): Boolean {
-        val tileEdge =
-            when (from) {
-                Direction.RIGHT -> leftCoordinates
-                Direction.LEFT -> rightCoordinates
-                Direction.UP -> bottomCoordinates
-                Direction.DOWN -> topCoordinates
-            }
-        val toTileEdge =
-            when (from) {
-                Direction.RIGHT -> rightCoordinates
-                Direction.LEFT -> leftCoordinates
-                Direction.UP -> topCoordinates
-                Direction.DOWN -> bottomCoordinates
-            }
-
-        for ((i, dir) in tileEdge.withIndex()) {
-            if (tile.getTileArea(dir) != to.getTileArea(toTileEdge[i])) {
-                return false
-            }
-        }
-        return true
+        return tile.getDirType(from.getOpposite()) == to.getDirType(from)
     }
 
     private fun canBeConnected(

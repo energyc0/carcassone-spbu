@@ -18,6 +18,9 @@ class Tile(
 
     fun getTileArea(cord: AreaCoordinate): GameObjectType = tileLook.getArea(cord)
 
+    /**
+     * Set given rotation for the TileLook.
+     */
     fun setRotation(rotation: Rotation) {
         tileLook.setRotation(rotation)
     }
@@ -27,6 +30,9 @@ class Tile(
         coords = coord
     }
 
+    /**
+     * Get type of the connection (GameObjectType) from the given direction.
+     */
     fun getDirType(direction: Direction) : GameObjectType = tileLook.getDirType(direction)
 
     /**

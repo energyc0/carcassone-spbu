@@ -51,7 +51,7 @@
     {
       "id" : "City04",
       "image" : "Base_Game_C3_Tile_I.png",
-      "tile_areas" : "CCCCC CCFFF CCFFF CCFFF CFFFFF",
+      "tile_areas" : "CCCCC CCFFF CCFFF CCFFF CFFFF",
       "count" : 2
     },
     {
@@ -71,7 +71,7 @@
       "image" : "Base_Game_C3_Tile_L.png",
       "tile_areas" : "CCCCC FFFFF RRXRR FFRFF FFRFF",
       "count" : 3
-    },,
+    },
     {
       "id" : "City_Shield03",
       "image" : "Base_Game_C3_Tile_M.png",
@@ -145,7 +145,7 @@
       "count" : 1
     }
   ],
-  "special_rules" : {
+  "tile_options" : {
     "starting_tiles" : ["City_Road01"],
     "has_shield" : ["City_Shield01", "City_Shield02", "City_Shield03", "City_Shield04", "City_Shield05", "City_Shield06"]
   }

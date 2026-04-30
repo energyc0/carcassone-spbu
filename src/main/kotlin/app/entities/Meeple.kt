@@ -14,8 +14,9 @@ class Meeple(
 
     fun isOnBoard(): Boolean = coord != null
 
+    /* Check whether meep is on board and throw exception if he is or set coordinate to null */
     fun returnToPlayer() {
-        check(!isOnBoard()) { "Meeple is on board." }
+        check(isOnBoard()) { "Meeple is on board." }
         coord = null
     }
 

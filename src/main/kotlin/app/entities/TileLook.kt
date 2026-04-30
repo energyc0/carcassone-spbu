@@ -1,5 +1,6 @@
 package app.entities
 
+import app.services.Direction
 import app.utils.AreaCoordinate
 import app.utils.TILE_AREA_SAMPLES
 import app.utils.TILE_AREA_SAMPLES_TOTAL
@@ -12,8 +13,13 @@ enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
  */
 class TileLook(
     private val areas: Array<GameObjectType>,
+    rot: Rotation = Rotation.STRAIGHT
 ) {
-    var rotation = Rotation.STRAIGHT
+
+    companion object {
+        const val MID_SAMPLE = TILE_AREA_SAMPLES / 2
+    }
+    var rotation = rot
         private set
 
     init {
@@ -33,6 +39,15 @@ class TileLook(
         return areas[countCordIdx(curCord)]
     }
 
+    fun getDirType(direction: Direction) : GameObjectType{
+        return when(direction) {
+            Direction.RIGHT -> getArea(AreaCoordinate(TILE_AREA_SAMPLES-1, MID_SAMPLE))
+            Direction.LEFT -> getArea(AreaCoordinate(0, MID_SAMPLE))
+            Direction.UP -> getArea(AreaCoordinate(MID_SAMPLE, 0))
+            Direction.DOWN -> getArea(AreaCoordinate(MID_SAMPLE, TILE_AREA_SAMPLES-1))
+        }
+    }
+
     private fun countCordIdx(cord: AreaCoordinate): Int = cord.y * TILE_AREA_SAMPLES + cord.x
 
     private fun rotateCord(cord: AreaCoordinate): AreaCoordinate {
@@ -41,8 +56,8 @@ class TileLook(
         return when (rotation) {
             Rotation.STRAIGHT -> cord
             Rotation.FLIPPED -> AreaCoordinate(maxX - cord.x, maxY - cord.y)
-            Rotation.LEFT -> AreaCoordinate(cord.y, maxY - cord.x)
-            Rotation.RIGHT -> AreaCoordinate(maxX - cord.y, cord.x)
+            Rotation.RIGHT -> AreaCoordinate(cord.y, maxY - cord.x)
+            Rotation.LEFT -> AreaCoordinate(maxX - cord.y, cord.x)
         }
     }
 }

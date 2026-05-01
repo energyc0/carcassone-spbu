@@ -6,7 +6,16 @@ enum class Direction {
     UP,
     LEFT,
     DOWN,
-    RIGHT,
+    RIGHT;
+
+    fun getOpposite() : Direction {
+        return when(this) {
+            UP -> DOWN
+            DOWN-> UP
+            LEFT -> RIGHT
+            RIGHT -> LEFT
+        }
+    }
 }
 
 interface IGameRules {

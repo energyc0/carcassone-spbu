@@ -10,16 +10,16 @@ class GameObjectField : GameObject(GameObjectType.FIELD) {
     }
 
     // You can earn score only at the end of the game
-    override fun getScore(
+    override fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> = mutableMapOf()
 
-    override fun getFinalScore(
+    override fun getFinalScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
-        if (meeple.isNotEmpty()) {
+        if (!hasMeeple()) {
             return mutableMapOf()
         }
 

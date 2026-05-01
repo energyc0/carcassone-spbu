@@ -11,7 +11,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
         private set
     private val scoreInc = 2
 
-    override fun getScore(
+    override fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
@@ -34,7 +34,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
     }
 
     // 1 point for every tile
-    override fun getFinalScore(
+    override fun getFinalScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)

@@ -28,7 +28,7 @@ internal class MeepleTest {
 
         for (i in 0..3) {
             assert(!m.isOnBoard())
-            m.setArea(TileCoordinate(Vec2(i, i-1), AreaCoordinate(i+12, i-22)))
+            m.setArea(TileCoordinate(Vec2(i, i - 1), AreaCoordinate(i + 12, i - 22)))
             assert(m.isOnBoard())
             assertDoesNotThrow { m.returnToPlayer() }
             assert(m.color == Color.RED)

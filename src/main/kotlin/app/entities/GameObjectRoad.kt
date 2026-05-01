@@ -26,17 +26,17 @@ class GameObjectRoad : GameObject(GameObjectType.ROAD) {
         return true
     }
 
-    override fun getScore(
+    override fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> =
-        if (meeple.isEmpty() || !isBuilt(start, board)) {
+        if (!hasMeeple() || !isBuilt(start, board)) {
             mutableMapOf()
         } else {
             scoreForPlayer(tilesCountOccupied)
         }
 
-    override fun getFinalScore(
+    override fun getFinalScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)

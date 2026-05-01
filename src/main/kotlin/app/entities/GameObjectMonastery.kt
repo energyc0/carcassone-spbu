@@ -40,21 +40,21 @@ class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
         return result
     }
 
-    override fun getScore(
+    override fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> =
-        if (meeple.isEmpty() || !isBuilt(start, board)) {
+        if (!hasMeeple() || !isBuilt(start, board)) {
             mutableMapOf()
         } else {
             scoreForPlayer(MONASTERY_TOTAL_SCORE)
         }
 
-    override fun getFinalScore(
+    override fun getFinalScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
-        if (meeple.isEmpty()) {
+        if (!hasMeeple()) {
             return mutableMapOf()
         }
         return scoreForPlayer(countAdjacentTiles(start, board))

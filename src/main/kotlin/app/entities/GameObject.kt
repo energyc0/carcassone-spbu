@@ -14,37 +14,70 @@ abstract class GameObjectDummy(
 abstract class GameObject(
     gameObjectType: GameObjectType,
 ) : GameObjectDummy(gameObjectType) {
-    var meeple = mutableListOf<Meeple>()
-    protected var tilesCountOccupied = 1
+    private var meeple = mutableListOf<Meeple>()
+    private var rootTilesCountOccupied = 1
     var hasGottenScore = false
         private set
+    private var parentObj : GameObject? = null
 
     init {
         require(type != GameObjectType.CROSSROAD) { "There cannot be GameObject of type \"CROSSROAD\"." }
     }
 
+    val tilesCountOccupied : Int
+        get() {
+            return traverseToParent().rootTilesCountOccupied
+        }
+
+    private fun traverseToParent() : GameObject {
+        var parent = parentObj ?: return this
+
+        while (parent.parentObj != null) {
+            val newParent = parent.parentObj ?: break
+            parent = newParent
+            parentObj = parent
+        }
+
+        return parent
+    }
+
+    protected abstract fun getScoreInternal (
+        start: TileCoordinate,
+        board: IGameBoardReadForObject,
+    ): MutableMap<Color, Int>
+
+    protected abstract fun getFinalScoreInternal(
+        start: TileCoordinate,
+        board: IGameBoardReadForObject,
+    ): MutableMap<Color, Int>
+
     /**
      * Try to BFS the object. check whether the object is built
      * If the object is built, return score for every player and return meeple.
      */
-    abstract fun getScore(
+    fun getScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int>
+    ): MutableMap<Color, Int> {
+        return traverseToParent().getScoreInternal(start, board)
+    }
 
-    abstract fun getFinalScore(
+    fun getFinalScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int>
+    ): MutableMap<Color, Int>{
+        return traverseToParent().getFinalScoreInternal(start, board)
+    }
 
     private fun returnMeeple() {
-        meeple.forEach { i -> i.returnToPlayer() }
+        traverseToParent().meeple.forEach { i -> i.returnToPlayer() }
     }
 
     protected fun scoreForPlayer(score: Int): MutableMap<Color, Int> {
         val count = mutableMapOf<Color, Int>()
+        val obj = traverseToParent()
 
-        meeple.forEach { m ->
+        obj.meeple.forEach { m ->
             count[m.color] = count.getOrDefault(m.color, 0) + 1
         }
 
@@ -61,12 +94,36 @@ abstract class GameObject(
         return result
     }
 
+    fun mergeWith(obj : GameObject) {
+        require(obj.type == type) { "Cannot merge GameObject`s of different type" }
+        val thisParent = traverseToParent()
+        val objParent = obj.traverseToParent()
+        thisParent.meeple.addAll(objParent.meeple)
+        thisParent.rootTilesCountOccupied += objParent.tilesCountOccupied
+        objParent.parentObj = thisParent
+    }
+
     /**
      * Just add meeple in the GameObject list. Do not set it on the board.
      */
     fun addMeep(meep: Meeple) {
-        meeple.addLast(meep)
+        traverseToParent().meeple.addLast(meep)
     }
 
-    fun hasMeeple(): Boolean = meeple.isNotEmpty()
+    fun hasMeeple(): Boolean = traverseToParent().meeple.isNotEmpty()
+
+    override fun equals(other: Any?): Boolean {
+        if (other is GameObject) {
+            return other.traverseToParent() === this.traverseToParent()
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        var result = tilesCountOccupied
+        result = 31 * result + hasGottenScore.hashCode()
+        result = 31 * result + meeple.hashCode()
+        result = 31 * result + (parentObj?.hashCode() ?: 0)
+        return result
+    }
 }

@@ -13,7 +13,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 internal class PlayerTest {
-    private lateinit var player : Player
+    private lateinit var player: Player
 
     @BeforeEach
     fun setUp() {
@@ -27,7 +27,7 @@ internal class PlayerTest {
         for (i in 1..MEEPLE_COUNT) {
             val m = player.findFreeMeeple()
             assertNotNull(m)
-            m.setArea(TileCoordinate(Vec2(0,0), AreaCoordinate(0,0)))
+            m.setArea(TileCoordinate(Vec2(0, 0), AreaCoordinate(0, 0)))
         }
         assertNull(player.findFreeMeeple())
     }

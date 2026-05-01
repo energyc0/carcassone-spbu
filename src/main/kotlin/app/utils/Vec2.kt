@@ -6,9 +6,7 @@ data class Vec2(
     val x: Int,
     val y: Int,
 ) {
-    override fun equals(other: Any?): Boolean {
-        return this === other || (other is Vec2 && other.x == this.x && other.y == this.y)
-    }
+    override fun equals(other: Any?): Boolean = this === other || (other is Vec2 && other.x == this.x && other.y == this.y)
 
     fun getAdjacent(): Array<Vec2> =
         arrayOf(

@@ -15,9 +15,7 @@ class AreaCoordinate(
     coordX: Int,
     coordY: Int,
 ) {
-    override fun equals(other: Any?): Boolean {
-        return this === other || (other is AreaCoordinate && other.x == this.x && other.y == this.y)
-    }
+    override fun equals(other: Any?): Boolean = this === other || (other is AreaCoordinate && other.x == this.x && other.y == this.y)
 
     val x = Math.floorMod(coordX, TILE_AREA_SAMPLES)
     val y = Math.floorMod(coordY, TILE_AREA_SAMPLES)
@@ -29,6 +27,12 @@ class AreaCoordinate(
             Direction.LEFT -> AreaCoordinate(x - 1, y)
             Direction.RIGHT -> AreaCoordinate(x + 1, y)
         }
+
+    override fun hashCode(): Int {
+        var result = x
+        result = 31 * result + y
+        return result
+    }
 }
 
 // Top edge from left to right.

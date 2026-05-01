@@ -12,9 +12,7 @@ class GameRules : IGameRules {
         tile: Tile,
         to: Tile,
         from: Direction,
-    ): Boolean {
-        return tile.getDirType(from.getOpposite()) == to.getDirType(from)
-    }
+    ): Boolean = tile.getDirType(from.getOpposite()) == to.getDirType(from)
 
     private fun canBeConnected(
         edge1: Array<GameObjectType>,

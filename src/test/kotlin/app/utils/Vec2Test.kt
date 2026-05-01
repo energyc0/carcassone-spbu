@@ -7,13 +7,12 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 internal class Vec2Test {
-
     @Test
     @DisplayName("Vec2 equality test")
     fun equalityTest() {
-        val v1 = Vec2(1,1)
-        val v2 = Vec2(1,1)
-        val v3 = Vec2(-1,2)
+        val v1 = Vec2(1, 1)
+        val v2 = Vec2(1, 1)
+        val v3 = Vec2(-1, 2)
 
         assert(v1 == v2)
         assert(v1 == v1)
@@ -24,10 +23,10 @@ internal class Vec2Test {
     @Test
     @DisplayName("Find direction between adjacent points")
     fun directionTest() {
-        val vec1: Vec2 = Vec2(0,0)
-        val vec2: Vec2 = Vec2(1,0)
-        val vec3: Vec2 = Vec2(0,1)
-        val vec4: Vec2 = Vec2(-1,0)
+        val vec1: Vec2 = Vec2(0, 0)
+        val vec2: Vec2 = Vec2(1, 0)
+        val vec3: Vec2 = Vec2(0, 1)
+        val vec4: Vec2 = Vec2(-1, 0)
 
         assert(vec1.getDirection(vec2) == Direction.RIGHT)
         assert(vec1.getDirection(vec3) == Direction.UP)
@@ -38,9 +37,9 @@ internal class Vec2Test {
     @Test
     @DisplayName("Find adjacent vectors")
     fun adjacentTest() {
-        val vec = Vec2(1,3)
+        val vec = Vec2(1, 3)
 
-        vec.getAdjacent().forEach { i->
+        vec.getAdjacent().forEach { i ->
             assert(abs(vec.x - i.x) + abs(vec.y - i.y) == 1)
         }
     }

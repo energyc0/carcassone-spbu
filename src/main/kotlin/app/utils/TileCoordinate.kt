@@ -11,10 +11,10 @@ data class TileCoordinate(
     val tileCoord: Vec2,
     val areaCoord: AreaCoordinate,
 ) {
-    override fun equals(other: Any?): Boolean {
-        return this === other
-        || (other is TileCoordinate && other.tileCoord == this.tileCoord && other.areaCoord == this.areaCoord)
-    }
+    override fun equals(other: Any?): Boolean =
+        this === other ||
+            (other is TileCoordinate && other.tileCoord == this.tileCoord && other.areaCoord == this.areaCoord)
+
     fun getAdjacent(dir: Direction): TileCoordinate {
         val adjArea = areaCoord.getAdjacent(dir)
         return when (dir) {
@@ -56,6 +56,7 @@ data class TileCoordinate(
     }
 
     fun getAdjacent(): Array<TileCoordinate> = Direction.entries.map { dir -> getAdjacent(dir) }.toTypedArray()
+
     override fun hashCode(): Int {
         var result = tileCoord.hashCode()
         result = 31 * result + areaCoord.hashCode()

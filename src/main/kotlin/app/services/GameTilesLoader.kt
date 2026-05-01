@@ -70,7 +70,7 @@ class GameTilesLoader : IGameTilesLoader {
             }
         val tileLook = TileLook(tileObjects)
         val isStarting = tileOptions.starting_tiles.contains(tileData.id)
-        val tile = Tile(isStarting, tileLook)
+        val tile = Tile(tileLook, isStarting)
         return Pair(tile, tileData.count)
     }
 

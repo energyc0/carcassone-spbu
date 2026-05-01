@@ -9,6 +9,7 @@ import app.entities.Rotation
 import app.entities.Tile
 import app.entities.TileLook
 import app.entities.TileLook.Companion.MID_SAMPLE
+import app.services.Direction
 import app.services.GameRules
 import app.utils.AreaCoordinate
 import app.utils.TILE_AREA_SAMPLES
@@ -68,7 +69,7 @@ internal class GameBoardIntegrationTest {
         assertEquals(startTile, gameBoard.getTile(Vec2(0, 0)))
         assertEquals(secondTile, gameBoard.getTile(Vec2(1, 0)))
 
-        /* Check whether objects has the same type */
+        // Check whether objects has the same type
         var centerCoord = TileCoordinate(Vec2(0, 0), AreaCoordinate(1, 1))
         val obj1 = gameBoard.getObject(centerCoord)
         assertEquals(GameObjectType.ROAD, obj1?.type)
@@ -77,7 +78,7 @@ internal class GameBoardIntegrationTest {
         val obj2 = gameBoard.getObject(centerCoord)
         assertEquals(GameObjectType.ROAD, obj2?.type)
 
-        /* Check whether it is the same object */
+        // Check whether it is the same object
         assertEquals(obj1, obj2)
     }
 
@@ -123,7 +124,7 @@ internal class GameBoardIntegrationTest {
         val startTile = Tile(TileLook(roadAreas), true)
         gameBoard.insertTile(startTile, Vec2(0, 0))
 
-        val player1 = Player(Color.RED,"player1")
+        val player1 = Player(Color.RED, "player1")
         val player2 = Player(Color.BLUE, "player2")
         val meeple1 = player1.findFreeMeeple()
         val meeple2 = player1.findFreeMeeple()
@@ -151,17 +152,19 @@ internal class GameBoardIntegrationTest {
         val startTile = Tile(TileLook(startAreas))
         gameBoard.insertTile(startTile, Vec2(0, 0))
 
-        /* Upper side of the tile is city */
-        val fieldCityAreas = Array(TILE_AREA_SAMPLES_TOTAL) { i->
-            if (i < TILE_AREA_SAMPLES * 2)
-                GameObjectType.CITY
-            else
-                GameObjectType.FIELD
-        }
+        // Upper side of the tile is city
+        val fieldCityAreas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                if (i < TILE_AREA_SAMPLES * 2) {
+                    GameObjectType.CITY
+                } else {
+                    GameObjectType.FIELD
+                }
+            }
         val tile2 = Tile(TileLook(fieldCityAreas))
 
         tile2.setRotation(Rotation.LEFT)
-
+        assert(gameRules.canConnect(tile2, startTile, Direction.RIGHT))
         assertDoesNotThrow {
             gameBoard.insertTile(tile2, Vec2(1, 0))
         }
@@ -190,13 +193,14 @@ internal class GameBoardIntegrationTest {
     @Test
     @DisplayName("Should correctly get object type at specific coordinate")
     fun getObjectTypeTest() {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) { index ->
-            when (index) {
-                0 -> GameObjectType.CITY
-                TILE_AREA_SAMPLES_TOTAL - 1 -> GameObjectType.MONASTERY
-                else -> GameObjectType.FIELD
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { index ->
+                when (index) {
+                    0 -> GameObjectType.CITY
+                    TILE_AREA_SAMPLES_TOTAL - 1 -> GameObjectType.MONASTERY
+                    else -> GameObjectType.FIELD
+                }
             }
-        }
 
         val tile = Tile(TileLook(areas), true)
         gameBoard.insertTile(tile, Vec2(0, 0))
@@ -215,18 +219,20 @@ internal class GameBoardIntegrationTest {
     fun roadBuildingTest() {
         val roadAreas = Array(TILE_AREA_SAMPLES_TOTAL) { GameObjectType.ROAD }
 
-        val positions = listOf(
-            Vec2(0, 0),
-            Vec2(1, 0),
-            Vec2(2, 0),
-            Vec2(3, 0)
-        )
+        val positions =
+            listOf(
+                Vec2(0, 0),
+                Vec2(1, 0),
+                Vec2(2, 0),
+                Vec2(3, 0),
+            )
 
         positions.forEachIndexed { index, pos ->
-            val tile = Tile(
-                isStarting = index == 0,
-                tileLook = TileLook(roadAreas)
-            )
+            val tile =
+                Tile(
+                    isStarting = index == 0,
+                    tileLook = TileLook(roadAreas),
+                )
             gameBoard.insertTile(tile, pos)
         }
 
@@ -242,4 +248,4 @@ internal class GameBoardIntegrationTest {
 
         assertEquals(firstObject, lastObject)
     }
-    }
+}

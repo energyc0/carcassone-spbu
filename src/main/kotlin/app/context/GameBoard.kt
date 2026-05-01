@@ -2,10 +2,10 @@ package app.context
 
 import app.entities.GameObject
 import app.entities.GameObjectDummy
-import app.services.GameObjectFactory
 import app.entities.GameObjectType
 import app.entities.Meeple
 import app.entities.Tile
+import app.services.GameObjectFactory
 import app.services.IGameRules
 import app.utils.AreaCoordinate
 import app.utils.TILE_AREA_SAMPLES
@@ -23,41 +23,50 @@ class GameBoard(
     private val gameObjects = mutableMapOf<Vec2, TileCoordinateData>()
     private val freeSpace = mutableSetOf<Vec2>(Vec2(0, 0))
 
-    /*
+    /**
      * Merge adjacent objects of the same type on the GameBoard and return a new one.
+     * The given startCoord may not contain adjacent initialized values.
      */
     private fun mergeObjects(startCoord: TileCoordinate): GameObject {
-        val startObject =
+        val resultObject =
             (
                 gameObjects[startCoord.tileCoord]?.objects[startCoord.areaCoord]
                     ?: throw IllegalStateException("Game object table corruption")
             ) as GameObject
-        val objectType = startObject.type
-        val totalMeeple = startObject.meeple
+        val objectType = resultObject.type
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(startCoord))
-        val objectSet = mutableSetOf(startObject)
+        val objectSet = mutableSetOf(resultObject)
+        val hasTile: (Vec2) -> Boolean = { gameObjects[it] != null }
 
-        val resultObject = GameObjectFactory().createObject(objectType)
         while (toVisit.isNotEmpty()) {
             val curCoord = toVisit.removeFirst()
             visited.add(curCoord)
-            val curObject = (gameObjects[curCoord.tileCoord]?.objects[curCoord.areaCoord] ?: continue) as GameObject
-            if (curObject.type == objectType) {
-                if (!objectSet.contains(curObject)) {
-                    objectSet.add(curObject)
-                    totalMeeple.addAll(curObject.meeple)
-                }
+            if (!hasTile(curCoord.tileCoord)) {
+                continue
+            }
+            val curObject = getObject(curCoord)
+            /* Check whether there is an object already.
+             * Set a new one if there is empty or merge with existing.
+             */
+            if (curObject == null) {
+                gameObjects[curCoord.tileCoord]?.objects[curCoord.areaCoord] = resultObject
                 curCoord.getAdjacent().forEach { i ->
                     if (!visited.contains(i)) {
                         toVisit.addLast(i)
                     }
                 }
-                gameObjects[curCoord.tileCoord]?.objects[curCoord.areaCoord] = resultObject
+            } else {
+                if (curObject.type == objectType) {
+                    // Merge and redefine curObject`s parent
+                    if (!objectSet.contains(curObject)) {
+                        objectSet.add(curObject)
+                        resultObject.mergeWith(curObject)
+                    }
+                }
             }
         }
 
-        resultObject.meeple = totalMeeple
         return resultObject
     }
 
@@ -81,6 +90,7 @@ class GameBoard(
                     }
                 }.toSet()
 
+        // Means that there can be 0, 2 or more objects. So needs to create a new one and merge with others.
         if (adj.size != 1) {
             gameObjects[coord.tileCoord]?.objects[coord.areaCoord] = GameObjectFactory().createObject(type)
             return mergeObjects(coord)
@@ -92,11 +102,11 @@ class GameBoard(
         newTile: Tile,
         coordinate: Vec2,
     ) {
-        val tileObjects = mutableMapOf<AreaCoordinate, GameObjectDummy>()
-        gameObjects[coordinate] = TileCoordinateData(newTile, tileObjects)
         if (!freeSpace.contains(coordinate)) {
             throw IllegalArgumentException("There is no space to take.")
         }
+        val tileObjects = mutableMapOf<AreaCoordinate, GameObjectDummy>()
+        gameObjects[coordinate] = TileCoordinateData(newTile, tileObjects)
 
         // Add adjacent coordinates to freeSpace and delete the given coordinate
         coordinate.getAdjacent().forEach { adj -> if (!gameObjects.contains(adj)) freeSpace.add(adj) }
@@ -121,9 +131,9 @@ class GameBoard(
             freeSpace.contains(coordinate) &&
                 adjacentTiles.all { curCoord ->
                     val toTile =
-                        gameObjects[coordinate]?.tile
+                        gameObjects[curCoord]?.tile
                             ?: throw IllegalStateException("GameBoard cannot be empty.")
-                    val dir = coordinate.getDirection(curCoord)
+                    val dir = curCoord.getDirection(coordinate)
                     gameRules.canConnect(newTile, toTile, dir)
                 }
         )

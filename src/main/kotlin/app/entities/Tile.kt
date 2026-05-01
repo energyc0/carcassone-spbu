@@ -10,8 +10,8 @@ import app.utils.rightCoordinates
 import app.utils.topCoordinates
 
 class Tile(
-    val isStarting: Boolean,
     private val tileLook: TileLook,
+    val isStarting: Boolean = false,
 ) {
     var coords: Vec2? = null
         private set
@@ -33,7 +33,7 @@ class Tile(
     /**
      * Get type of the connection (GameObjectType) from the given direction.
      */
-    fun getDirType(direction: Direction) : GameObjectType = tileLook.getDirType(direction)
+    fun getDirType(direction: Direction): GameObjectType = tileLook.getDirType(direction)
 
     /**
      * up, left, down, right from 0 to 3 indices

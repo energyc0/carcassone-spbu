@@ -18,18 +18,18 @@ abstract class GameObject(
     private var rootTilesCountOccupied = 1
     var hasGottenScore = false
         private set
-    private var parentObj : GameObject? = null
+    private var parentObj: GameObject? = null
 
     init {
         require(type != GameObjectType.CROSSROAD) { "There cannot be GameObject of type \"CROSSROAD\"." }
     }
 
-    val tilesCountOccupied : Int
+    val tilesCountOccupied: Int
         get() {
             return traverseToParent().rootTilesCountOccupied
         }
 
-    private fun traverseToParent() : GameObject {
+    private fun traverseToParent(): GameObject {
         var parent = parentObj ?: return this
 
         while (parent.parentObj != null) {
@@ -41,7 +41,7 @@ abstract class GameObject(
         return parent
     }
 
-    protected abstract fun getScoreInternal (
+    protected abstract fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int>
@@ -58,16 +58,12 @@ abstract class GameObject(
     fun getScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
-        return traverseToParent().getScoreInternal(start, board)
-    }
+    ): MutableMap<Color, Int> = traverseToParent().getScoreInternal(start, board)
 
     fun getFinalScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int>{
-        return traverseToParent().getFinalScoreInternal(start, board)
-    }
+    ): MutableMap<Color, Int> = traverseToParent().getFinalScoreInternal(start, board)
 
     private fun returnMeeple() {
         traverseToParent().meeple.forEach { i -> i.returnToPlayer() }
@@ -94,7 +90,7 @@ abstract class GameObject(
         return result
     }
 
-    fun mergeWith(obj : GameObject) {
+    fun mergeWith(obj: GameObject) {
         require(obj.type == type) { "Cannot merge GameObject`s of different type" }
         val thisParent = traverseToParent()
         val objParent = obj.traverseToParent()

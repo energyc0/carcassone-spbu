@@ -21,8 +21,8 @@ internal class GameRulesTest {
         tileLookData1[TILE_AREA_SAMPLES_TOTAL - TILE_AREA_SAMPLES + TileLook.MID_SAMPLE] = GameObjectType.MONASTERY
         tileLookData2[TileLook.MID_SAMPLE] = GameObjectType.ROAD
         tileLookData2[TILE_AREA_SAMPLES_TOTAL - TILE_AREA_SAMPLES + TileLook.MID_SAMPLE] = GameObjectType.MONASTERY
-        val tile1 = Tile(false, TileLook(tileLookData1))
-        val tile2 = Tile(false, TileLook(tileLookData1))
+        val tile1 = Tile(TileLook(tileLookData1))
+        val tile2 = Tile(TileLook(tileLookData1))
 
         assert(!gameRules.canConnect(tile1, tile2, Direction.UP))
         assert(!gameRules.canConnect(tile1, tile2, Direction.DOWN))

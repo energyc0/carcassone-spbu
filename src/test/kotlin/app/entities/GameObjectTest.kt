@@ -98,7 +98,7 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Chained merges should resolve to root parent")
     fun resolveParentTest() {
-        val roads = Array(5) {factory.createObject(GameObjectType.ROAD)}
+        val roads = Array(5) { factory.createObject(GameObjectType.ROAD) }
         val meeple = Meeple(Color.RED)
 
         roads[0].addMeep(meeple)
@@ -113,7 +113,7 @@ internal class GameObjectTest {
         }
 
         roads[3].mergeWith(roads[4])
-        /* Objects have the same root */
+        // Objects have the same root
         root = roads[4]
         for (i in 3..4) {
             assert(roads[i].tilesCountOccupied == 2)
@@ -123,7 +123,7 @@ internal class GameObjectTest {
 
         roads[3].mergeWith(roads[1])
         root = roads[3]
-        roads.forEach{ road->
+        roads.forEach { road ->
             assert(road.hasMeeple())
             assertEquals(5, road.tilesCountOccupied)
             assert(road == root)

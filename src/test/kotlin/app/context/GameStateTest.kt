@@ -15,19 +15,24 @@ import kotlin.test.assertNotNull
 
 internal class GameStateTest {
     private lateinit var gameState: GameState
-    private lateinit var players : Map<Color, Player>
+    private lateinit var players: Map<Color, Player>
+
     @BeforeEach
     fun setUp() {
-        players = mapOf(Color.RED to Player(Color.RED, "player1"),
-            Color.GREEN to Player(Color.GREEN, "player2"),
-            Color.BLUE to Player(Color.BLUE, "player2"))
+        players =
+            mapOf(
+                Color.RED to Player(Color.RED, "player1"),
+                Color.GREEN to Player(Color.GREEN, "player2"),
+                Color.BLUE to Player(Color.BLUE, "player2"),
+            )
 
         gameState = GameState(players.values.toTypedArray())
     }
 
-    private fun expectName(name : String, color : Color) : Boolean {
-        return players[color]?.name == name
-    }
+    private fun expectName(
+        name: String,
+        color: Color,
+    ): Boolean = players[color]?.name == name
 
     @Test
     @DisplayName("GameState score test")
@@ -52,7 +57,7 @@ internal class GameStateTest {
     @Test
     @DisplayName("GameState change players turn test")
     fun playersTest() {
-        for (i in 1..players.size*2) {
+        for (i in 1..players.size * 2) {
             assert(expectName(gameState.getPlayerName(), gameState.getPlayerColor()))
             gameState.nextTurn()
         }
@@ -65,7 +70,7 @@ internal class GameStateTest {
             for (i in 1..MEEPLE_COUNT) {
                 val meep = gameState.findPlayerMeeple()
                 assertNotNull(meep)
-                meep.setArea(TileCoordinate(Vec2(0,0), AreaCoordinate(0,0)))
+                meep.setArea(TileCoordinate(Vec2(0, 0), AreaCoordinate(0, 0)))
             }
             assertNull(gameState.findPlayerMeeple())
             gameState.nextTurn()

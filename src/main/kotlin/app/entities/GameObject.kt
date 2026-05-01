@@ -101,8 +101,11 @@ abstract class GameObject(
 
     /**
      * Just add meeple in the GameObject list. Do not set it on the board.
+     * Throw IllegalStateException if object already has meeple.
      */
     fun addMeep(meep: Meeple) {
+        if (hasMeeple())
+            throw IllegalStateException("Object has already meeple.")
         traverseToParent().meeple.addLast(meep)
     }
 

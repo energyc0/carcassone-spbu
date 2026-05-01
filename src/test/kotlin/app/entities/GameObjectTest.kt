@@ -47,6 +47,7 @@ internal class GameObjectTest {
     @DisplayName("GameObject add meeple test")
     fun addMeepleTest() {
         val meeple = Meeple(Color.RED)
+        val meepleToThrow = Meeple(Color.GREEN)
         GameObjectType.entries.forEach { type ->
             if (type == GameObjectType.CROSSROAD) return@forEach
 
@@ -54,6 +55,7 @@ internal class GameObjectTest {
             obj.addMeep(meeple)
             assert(!meeple.isOnBoard())
             assert(obj.hasMeeple())
+            assertThrows<IllegalStateException> { obj.addMeep(meepleToThrow) }
         }
     }
 

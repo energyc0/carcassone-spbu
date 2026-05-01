@@ -2,7 +2,7 @@ package app.context
 
 import app.entities.GameObject
 import app.entities.GameObjectDummy
-import app.entities.GameObjectFactory
+import app.services.GameObjectFactory
 import app.entities.GameObjectType
 import app.entities.Meeple
 import app.entities.Tile

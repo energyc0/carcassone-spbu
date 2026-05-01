@@ -22,13 +22,14 @@ abstract class IGameState(
 
     fun nextTurn() {
         curPlayerIndex = (curPlayerIndex + 1) % players.size
+        curPlayer = players[curPlayerIndex]
     }
 
-    fun getPlayerScore(): Int = players[curPlayerIndex].score
+    fun getPlayerScore(): Int = curPlayer.score
 
-    fun getPlayerName(): String = players[curPlayerIndex].name
+    fun getPlayerName(): String = curPlayer.name
 
-    fun getPlayerColor(): Color = players[curPlayerIndex].color
+    fun getPlayerColor(): Color = curPlayer.color
 
     fun addPlayerScore(scores: Map<Color, Int>) {
         scores.forEach { i -> findPlayer(i.key).addScore(i.value) }

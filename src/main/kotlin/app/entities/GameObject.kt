@@ -119,10 +119,6 @@ abstract class GameObject(
     }
 
     override fun hashCode(): Int {
-        var result = tilesCountOccupied
-        result = 31 * result + hasGottenScore.hashCode()
-        result = 31 * result + meeple.hashCode()
-        result = 31 * result + (parentObj?.hashCode() ?: 0)
-        return result
+        return System.identityHashCode(traverseToParent())
     }
 }

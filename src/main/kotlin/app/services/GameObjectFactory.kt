@@ -2,6 +2,8 @@ package app.services
 
 import app.entities.GameObject
 import app.entities.GameObjectCity
+import app.entities.GameObjectCrossroad
+import app.entities.GameObjectDummy
 import app.entities.GameObjectField
 import app.entities.GameObjectMonastery
 import app.entities.GameObjectRoad
@@ -11,7 +13,7 @@ class GameObjectFactory {
     /**
      * Create GameObject of the given type. Throws IllegalArgumentException if type is 'CROSSROAD'
      */
-    fun createObject(type: GameObjectType): GameObject =
+    fun createObject(type: GameObjectType): GameObjectDummy =
         when (type) {
             GameObjectType.CITY -> {
                 GameObjectCity()
@@ -30,7 +32,7 @@ class GameObjectFactory {
             }
 
             GameObjectType.CROSSROAD -> {
-                throw IllegalArgumentException("Cannot create GameObject of type \"CROSSROAD\".")
+                GameObjectCrossroad()
             }
         }
 }

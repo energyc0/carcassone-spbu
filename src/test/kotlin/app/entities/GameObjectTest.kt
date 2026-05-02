@@ -35,11 +35,7 @@ internal class GameObjectTest {
         }
 
         GameObjectType.entries.forEach { type ->
-            if (type == GameObjectType.CROSSROAD) {
-                assertThrows(IllegalArgumentException::class.java) { factory.createObject(type) }
-            } else {
-                assertDoesNotThrow { factory.createObject(type) }
-            }
+           assert(type == factory.createObject(type).type)
         }
     }
 
@@ -51,7 +47,7 @@ internal class GameObjectTest {
         GameObjectType.entries.forEach { type ->
             if (type == GameObjectType.CROSSROAD) return@forEach
 
-            val obj = factory.createObject(type)
+            val obj = factory.createObject(type) as GameObject
             obj.addMeep(meeple)
             assert(!meeple.isOnBoard())
             assert(obj.hasMeeple())
@@ -62,8 +58,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merged roads should calculate score based on total tiles")
     fun mergeScoreTest() {
-        val road1 = factory.createObject(GameObjectType.ROAD)
-        val road2 = factory.createObject(GameObjectType.ROAD)
+        val road1 = factory.createObject(GameObjectType.ROAD) as GameObject
+        val road2 = factory.createObject(GameObjectType.ROAD) as GameObject
         assertDoesNotThrow {
             road1.mergeWith(road2)
         }
@@ -75,8 +71,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merge two fields should combine correctly")
     fun meepleMergeTest() {
-        val field1 = factory.createObject(GameObjectType.FIELD)
-        val field2 = factory.createObject(GameObjectType.FIELD)
+        val field1 = factory.createObject(GameObjectType.FIELD) as GameObject
+        val field2 = factory.createObject(GameObjectType.FIELD) as GameObject
         val meeple = Meeple(Color.RED)
 
         field1.addMeep(meeple)
@@ -89,8 +85,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merge different types should throw exception")
     fun differentTypeMergeTest() {
-        val road = factory.createObject(GameObjectType.ROAD)
-        val field = factory.createObject(GameObjectType.FIELD)
+        val road = factory.createObject(GameObjectType.ROAD) as GameObject
+        val field = factory.createObject(GameObjectType.FIELD) as GameObject
 
         assertThrows<IllegalArgumentException> {
             road.mergeWith(field)
@@ -100,7 +96,7 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Chained merges should resolve to root parent")
     fun resolveParentTest() {
-        val roads = Array(5) { factory.createObject(GameObjectType.ROAD) }
+        val roads = Array(5) { factory.createObject(GameObjectType.ROAD) as GameObject }
         val meeple = Meeple(Color.RED)
 
         roads[0].addMeep(meeple)

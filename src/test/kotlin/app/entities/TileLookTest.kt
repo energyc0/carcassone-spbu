@@ -1,16 +1,12 @@
 package app.entities
 
-import app.entities.TileTest.Companion.tileLookData
 import app.services.Direction
 import app.utils.AreaCoordinate
 import app.utils.TILE_AREA_SAMPLES
 import app.utils.TILE_AREA_SAMPLES_TOTAL
-import app.utils.TileCoordinate
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
-import java.awt.geom.Area
 
 internal class TileLookTest {
     companion object {

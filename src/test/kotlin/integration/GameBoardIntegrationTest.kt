@@ -30,6 +30,16 @@ internal class GameBoardIntegrationTest {
     private lateinit var gameBoard: GameBoard
     private lateinit var gameRules: GameRules
 
+    private fun createArrayWithHorizontalRoad() : Array<GameObjectType> {
+        return Array(TILE_AREA_SAMPLES_TOTAL) { i->
+            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+            if (coord.y == MID_SAMPLE)
+                GameObjectType.ROAD
+            else
+                GameObjectType.FIELD
+        }
+    }
+
     @BeforeEach
     fun setUp() {
         gameRules = GameRules()
@@ -217,7 +227,7 @@ internal class GameBoardIntegrationTest {
     @Test
     @DisplayName("Should handle sequence of tile placements forming a path")
     fun roadBuildingTest() {
-        val roadAreas = Array(TILE_AREA_SAMPLES_TOTAL) { GameObjectType.ROAD }
+        val roadAreas = createArrayWithHorizontalRoad()
 
         val positions =
             listOf(
@@ -240,12 +250,21 @@ internal class GameBoardIntegrationTest {
             assertNotNull(gameBoard.getTile(pos))
         }
 
-        val firstCoord = TileCoordinate(positions[0], AreaCoordinate(1, 1))
-        val lastCoord = TileCoordinate(positions[3], AreaCoordinate(1, 1))
+        val midAreaCoord = AreaCoordinate(MID_SAMPLE, MID_SAMPLE)
+        val firstCoord = TileCoordinate(positions[0], midAreaCoord)
+        val lastCoord = TileCoordinate(positions[3], midAreaCoord)
 
         val firstObject = gameBoard.getObject(firstCoord)
         val lastObject = gameBoard.getObject(lastCoord)
 
         assertEquals(firstObject, lastObject)
+        assertNotNull(firstObject)
+        firstObject.addMeep(Meeple(Color.RED))
+        positions.forEach { pos ->
+            val tilesOccupied = gameBoard.getObject(TileCoordinate(pos, midAreaCoord))?.tilesCountOccupied
+            val curCoord = TileCoordinate(pos, midAreaCoord)
+            assertEquals(positions.size, tilesOccupied)
+            assert(gameBoard.getObject(curCoord)?.hasMeeple() == true)
+        }
     }
 }

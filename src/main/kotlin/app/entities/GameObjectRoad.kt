@@ -30,10 +30,10 @@ class GameObjectRoad : GameObject(GameObjectType.ROAD) {
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> =
-        if (!hasMeeple() || !isBuilt(start, board)) {
-            mutableMapOf()
-        } else {
+        if (isBuilt(start, board)) {
             scoreForPlayer(tilesCountOccupied)
+        } else {
+            mutableMapOf()
         }
 
     override fun getFinalScoreInternal(

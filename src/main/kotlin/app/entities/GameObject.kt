@@ -42,6 +42,7 @@ abstract class GameObject(
             parent._hasGottenScore = value
         }
 
+    /** Parent has always the same type as child GameObject */
     protected var parent : GameObject
         get () {
             var curParent = _parentObj ?: return this

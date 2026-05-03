@@ -125,6 +125,7 @@ class GameBoard(
             throw IllegalArgumentException("Object already has meeple")
         }
         obj.addMeep(m)
+        m.setArea(coord)
     }
 
     override fun insertTile(

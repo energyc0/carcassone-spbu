@@ -5,7 +5,7 @@ import app.utils.TileCoordinate
 import app.utils.Vec2
 
 class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
-    private companion object {
+    companion object {
         const val MONASTERY_TOTAL_SCORE = 9
     }
 

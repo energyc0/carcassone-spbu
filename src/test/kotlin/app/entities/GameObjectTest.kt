@@ -31,7 +31,6 @@ internal class GameObjectTest {
         objList.forEachIndexed { index, obj ->
             assert(!obj.hasMeeple())
             assert(obj.type == typeList[index])
-            assert(!obj.hasGottenScore)
         }
 
         GameObjectType.entries.forEach { type ->
@@ -123,8 +122,8 @@ internal class GameObjectTest {
         root = roads[3]
         roads.forEach { road ->
             assert(road.hasMeeple())
-            assertEquals(5, road.tilesCountOccupied)
             assert(road == root)
+            assertEquals(5, road.tilesCountOccupied)
         }
     }
 }

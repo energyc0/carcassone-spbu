@@ -7,14 +7,22 @@ import app.utils.TileCoordinate
  *  Need to implement shield technique
  */
 class GameObjectCity : GameObject(GameObjectType.CITY) {
-    var isBuilt = false
-        private set
+    private var _isBuilt = false
     private val scoreInc = 2
 
-    override fun getScoreInternal(
+    var isBuilt : Boolean
+        get() {
+            return (parent as GameObjectCity)._isBuilt
+        }
+        set(value) {
+            (parent as GameObjectCity)._isBuilt = value
+        }
+
+    private fun checkIsBuilt(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
+    ) : Boolean {
+        if (isBuilt) return true
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(start))
 
@@ -22,7 +30,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
             val curCoord = toVisit.removeFirst()
             visited.add(curCoord)
 
-            val t = board.getObjectType(curCoord) ?: return mutableMapOf()
+            val t = board.getObjectType(curCoord) ?: return false
 
             curCoord.getAdjacent().forEach { i ->
                 if (!visited.contains(i) && t == type) {
@@ -30,7 +38,16 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
                 }
             }
         }
-        return scoreForPlayer(scoreInc * tilesCountOccupied)
+        isBuilt = true
+        return true
+    }
+
+    override fun getScoreInternal(
+        start: TileCoordinate,
+        board: IGameBoardReadForObject,
+    ): MutableMap<Color, Int> {
+        return if (checkIsBuilt(start, board)) scoreForPlayer(scoreInc * tilesCountOccupied)
+        else mutableMapOf()
     }
 
     // 1 point for every tile

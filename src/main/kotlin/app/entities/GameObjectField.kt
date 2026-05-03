@@ -19,10 +19,6 @@ class GameObjectField : GameObject(GameObjectType.FIELD) {
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
-        if (!hasMeeple()) {
-            return mutableMapOf()
-        }
-
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(start))
         val visitedCities = mutableSetOf<GameObjectCity>()

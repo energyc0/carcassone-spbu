@@ -14,6 +14,9 @@ class Player(
         private set
 
     fun addScore(sc: Int) {
+        if (sc < 0) {
+            throw IllegalArgumentException("Cannot add negative score to player.")
+        }
         score += sc
     }
 }

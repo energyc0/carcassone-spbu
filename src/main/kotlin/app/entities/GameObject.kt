@@ -2,7 +2,6 @@ package app.entities
 
 import app.context.IGameBoardReadForObject
 import app.utils.TileCoordinate
-import app.utils.Vec2
 import kotlin.collections.mutableMapOf
 
 enum class GameObjectType { FIELD, CITY, MONASTERY, ROAD, CROSSROAD }
@@ -14,31 +13,103 @@ abstract class GameObjectDummy(
 abstract class GameObject(
     gameObjectType: GameObjectType,
 ) : GameObjectDummy(gameObjectType) {
-    var meeple = mutableListOf<Meeple>()
-    protected var tilesCountOccupied = 1
-    var hasGottenScore = false
-        private set
+    private var parentMeeple = mutableListOf<Meeple>()
+    private var parentTilesOccupied = 1
+    private var parentHasGottenScore = false
+    private var actualParent: GameObject? = null
 
     init {
         require(type != GameObjectType.CROSSROAD) { "There cannot be GameObject of type \"CROSSROAD\"." }
     }
 
-    /*
+    var tilesCountOccupied: Int
+        get() {
+            return parent.parentTilesOccupied
+        }
+        private set(value) {
+            parent.parentTilesOccupied = value
+        }
+
+    private val meeple: MutableList<Meeple>
+        get() {
+            return parent.parentMeeple
+        }
+    private var hasGottenScore: Boolean
+        get() {
+            return parent.parentHasGottenScore
+        }
+        set(value: Boolean) {
+            parent.parentHasGottenScore = value
+        }
+
+    /** Parent has always the same type as child GameObject */
+    protected var parent: GameObject
+        get() {
+            var curParent = actualParent ?: return this
+
+            while (curParent.actualParent != null) {
+                val newParent = curParent.actualParent ?: break
+                curParent = newParent
+                actualParent = curParent
+            }
+
+            return curParent
+        }
+        set(value) {
+            if (actualParent == null) {
+                actualParent = value.parent
+            } else {
+                actualParent?.actualParent = value.parent
+            }
+        }
+
+    /** Children need to implement checking whether the object is built and returning score */
+    protected abstract fun getScoreInternal(
+        start: TileCoordinate,
+        board: IGameBoardReadForObject,
+    ): MutableMap<Color, Int>
+
+    /** Children need to implement returning score */
+    protected abstract fun getFinalScoreInternal(
+        start: TileCoordinate,
+        board: IGameBoardReadForObject,
+    ): MutableMap<Color, Int>
+
+    /**
      * Try to BFS the object. check whether the object is built
      * If the object is built, return score for every player and return meeple.
      */
-    abstract fun getScore(
+    fun getScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int>
+    ): MutableMap<Color, Int> {
+        if (hasGottenScore) {
+            return mutableMapOf()
+        }
+        val score = parent.getScoreInternal(start, board)
+        if (score.isNotEmpty()) {
+            hasGottenScore = true
+            parent.returnMeeple()
+        }
+        return score
+    }
 
-    abstract fun getFinalScore(
+    fun getFinalScore(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int>
+    ): MutableMap<Color, Int> {
+        if (hasGottenScore) {
+            return mutableMapOf()
+        }
+        val score = parent.getFinalScoreInternal(start, board)
+        hasGottenScore = true
+        parent.returnMeeple()
+        return score
+    }
 
     private fun returnMeeple() {
         meeple.forEach { i -> i.returnToPlayer() }
+        meeple.clear()
     }
 
     protected fun scoreForPlayer(score: Int): MutableMap<Color, Int> {
@@ -61,215 +132,32 @@ abstract class GameObject(
         return result
     }
 
+    fun mergeWith(obj: GameObject) {
+        require(obj.type == type) { "Cannot merge GameObject`s of different type" }
+        meeple.addAll(obj.meeple)
+        tilesCountOccupied += obj.tilesCountOccupied
+        obj.parent = parent
+    }
+
+    /**
+     * Just add meeple in the GameObject list. Do not set it on the board.
+     * Throw IllegalStateException if object already has meeple.
+     */
     fun addMeep(meep: Meeple) {
+        if (hasMeeple()) {
+            throw IllegalStateException("Object has already meeple.")
+        }
         meeple.addLast(meep)
     }
 
     fun hasMeeple(): Boolean = meeple.isNotEmpty()
-}
 
-class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
-    private companion object {
-        const val MONASTERY_TOTAL_SCORE = 9
+    override fun equals(other: Any?): Boolean {
+        if (other is GameObject) {
+            return other.parent === this.parent
+        }
+        return false
     }
 
-    private fun isBuilt(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): Boolean {
-        for (x in -1..1) {
-            for (y in -1..1) {
-                val coord = Vec2(start.tileCoord.x + x, start.tileCoord.y + y)
-                if (board.getTile(coord) == null) {
-                    return false
-                }
-            }
-        }
-        return true
-    }
-
-    private fun countAdjacentTiles(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): Int {
-        var result = 0
-        for (x in -1..1) {
-            for (y in -1..1) {
-                val coord = Vec2(start.tileCoord.x + x, start.tileCoord.y + y)
-                if (board.getTile(coord) != null) {
-                    result++
-                }
-            }
-        }
-        return result
-    }
-
-    override fun getScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> =
-        if (meeple.isEmpty() || !isBuilt(start, board)) {
-            mutableMapOf()
-        } else {
-            scoreForPlayer(MONASTERY_TOTAL_SCORE)
-        }
-
-    override fun getFinalScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
-        if (meeple.isEmpty()) {
-            return mutableMapOf()
-        }
-        return scoreForPlayer(countAdjacentTiles(start, board))
-    }
-}
-
-class GameObjectField : GameObject(GameObjectType.FIELD) {
-    // Score for every built adjacent city
-    private companion object {
-        const val SCORE_INCREMENT = 3
-    }
-
-    // You can earn score only at the end of the game
-    override fun getScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> = mutableMapOf()
-
-    override fun getFinalScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
-        if (meeple.isNotEmpty()) {
-            return mutableMapOf()
-        }
-
-        val visited = mutableSetOf<TileCoordinate>()
-        val toVisit = ArrayDeque(listOf(start))
-        val visitedCities = mutableSetOf<GameObjectCity>()
-        var score = 0
-
-        while (toVisit.isNotEmpty()) {
-            val curCoord = toVisit.removeFirst()
-            visited.add(curCoord)
-
-            val obj = board.getObject(curCoord) ?: continue
-            if (obj.type == GameObjectType.CITY && !visitedCities.contains(obj)) {
-                val city = obj as GameObjectCity
-                visitedCities.add(city)
-                if (city.isBuilt) {
-                    score += SCORE_INCREMENT
-                }
-            } else if (obj.type == GameObjectType.FIELD) {
-                curCoord.getAdjacent().forEach { i ->
-                    if (!visited.contains(i)) {
-                        toVisit.addLast(i)
-                    }
-                }
-            }
-        }
-        return scoreForPlayer(score)
-    }
-}
-
-class GameObjectRoad : GameObject(GameObjectType.ROAD) {
-    private fun isBuilt(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): Boolean {
-        val visited = mutableSetOf<TileCoordinate>()
-        val toVisit = ArrayDeque(listOf(start))
-
-        while (toVisit.isNotEmpty()) {
-            val curCoord = toVisit.removeFirst()
-            visited.add(curCoord)
-
-            val objDummy = board.getObjectDummy(curCoord) ?: return false
-
-            curCoord.getAdjacent().forEach { i ->
-                if (!visited.contains(i) && objDummy.type == type) {
-                    toVisit.addLast(i)
-                }
-            }
-        }
-        return true
-    }
-
-    override fun getScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> =
-        if (meeple.isEmpty() || !isBuilt(start, board)) {
-            mutableMapOf()
-        } else {
-            scoreForPlayer(tilesCountOccupied)
-        }
-
-    override fun getFinalScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)
-}
-
-/*
- *  Need to implement shield technique
- */
-class GameObjectCity : GameObject(GameObjectType.CITY) {
-    var isBuilt = false
-        private set
-    private val scoreInc = 2
-
-    override fun getScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
-        val visited = mutableSetOf<TileCoordinate>()
-        val toVisit = ArrayDeque(listOf(start))
-
-        while (toVisit.isNotEmpty()) {
-            val curCoord = toVisit.removeFirst()
-            visited.add(curCoord)
-
-            val t = board.getObjectType(curCoord) ?: return mutableMapOf()
-
-            curCoord.getAdjacent().forEach { i ->
-                if (!visited.contains(i) && t == type) {
-                    toVisit.addLast(i)
-                }
-            }
-        }
-        return scoreForPlayer(scoreInc * tilesCountOccupied)
-    }
-
-    // 1 point for every tile
-    override fun getFinalScore(
-        start: TileCoordinate,
-        board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)
-}
-
-class GameObjectFactory {
-    fun createObject(type: GameObjectType): GameObject =
-        when (type) {
-            GameObjectType.CITY -> {
-                GameObjectCity()
-            }
-
-            GameObjectType.FIELD -> {
-                GameObjectField()
-            }
-
-            GameObjectType.ROAD -> {
-                GameObjectRoad()
-            }
-
-            GameObjectType.MONASTERY -> {
-                GameObjectMonastery()
-            }
-
-            GameObjectType.CROSSROAD -> {
-                throw IllegalArgumentException("Cannot create GameObject of type \"CROSSROAD\".")
-            }
-        }
+    override fun hashCode(): Int = System.identityHashCode(parent)
 }

@@ -4,6 +4,10 @@ import kotlin.random.Random
 
 const val TILES_DECK_COUNT = 72
 
+/**
+ * There must be TILES_DECK_COUNT tiles in 'tiles' initialization.
+ * Throws IllegalArgumentException on error.
+ */
 class Deck(
     tiles: MutableList<Tile>,
 ) {
@@ -25,6 +29,9 @@ class Deck(
         shuffledTiles.addAll(tiles.shuffled())
     }
 
+    /**
+     * Get next tile or throw NoSuchElementException.
+     */
     fun getNextTile(): Tile = shuffledTiles.removeLast()
 
     fun hasNextTile(): Boolean = shuffledTiles.isNotEmpty()

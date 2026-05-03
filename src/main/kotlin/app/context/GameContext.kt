@@ -13,7 +13,7 @@ import app.services.ITurnSuggester
  * Main game class. Can throw IllegalStateArgumentException during initialization.
  */
 class GameContext(
-    players : Array<Player>,
+    players: Array<Player>,
     tilesLoader: IGameTilesLoader,
     gameRules: IGameRules,
 ) {

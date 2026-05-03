@@ -3,6 +3,8 @@ package app.services
 import app.context.IGameBoardReadForCounter
 import app.entities.Color
 import app.entities.GameObject
+import app.entities.GameObjectDummy
+import app.entities.GameObjectType
 import app.utils.AreaCoordinate
 import app.utils.TILE_AREA_SAMPLES
 import app.utils.TileCoordinate
@@ -25,18 +27,19 @@ class ScoreCounter : IScoreCounter {
         lastCoord: Vec2,
         board: IGameBoardReadForCounter,
     ): Map<Color, Int> {
-        val visitedObj = mutableSetOf<GameObject>()
+        val visitedObj = mutableSetOf<GameObjectDummy>()
         var result = mutableMapOf<Color, Int>()
         for (x in 0..TILE_AREA_SAMPLES) {
             for (y in 0..TILE_AREA_SAMPLES) {
                 val tileCoordinate = TileCoordinate(lastCoord, AreaCoordinate(x, y))
-                val obj =
-                    board.getObject(tileCoordinate)
+                val objDummy =
+                    board.getObjectDummy(tileCoordinate)
                         ?: throw IllegalStateException("Board cannot contain empty elements.")
-                if (visitedObj.contains(obj)) {
+                if (visitedObj.contains(objDummy) || objDummy.type == GameObjectType.CROSSROAD) {
                     continue
                 }
-                visitedObj.add(obj)
+                visitedObj.add(objDummy)
+                val obj = objDummy as GameObject
                 result = mergeColorIntMaps(result, obj.getScore(tileCoordinate, board))
             }
         }

@@ -1,6 +1,6 @@
 package app.entities
 
-import app.context.IGameBoardReadForObject
+import app.context.IGameBoardRead
 import app.utils.TileCoordinate
 import app.utils.Vec2
 
@@ -11,7 +11,7 @@ class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
 
     private fun isBuilt(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): Boolean {
         for (x in -1..1) {
             for (y in -1..1) {
@@ -26,7 +26,7 @@ class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
 
     private fun countAdjacentTiles(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): Int {
         var result = 0
         for (x in -1..1) {
@@ -42,7 +42,7 @@ class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
 
     override fun getScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> =
         if (!hasMeeple() || !isBuilt(start, board)) {
             mutableMapOf()
@@ -52,7 +52,7 @@ class GameObjectMonastery : GameObject(GameObjectType.MONASTERY) {
 
     override fun getFinalScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> {
         if (!hasMeeple()) {
             return mutableMapOf()

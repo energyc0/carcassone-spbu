@@ -1,12 +1,12 @@
 package app.entities
 
-import app.context.IGameBoardReadForObject
+import app.context.IGameBoardRead
 import app.utils.TileCoordinate
 
 class GameObjectRoad : GameObject(GameObjectType.ROAD) {
     private fun isBuilt(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): Boolean {
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(start))
@@ -28,7 +28,7 @@ class GameObjectRoad : GameObject(GameObjectType.ROAD) {
 
     override fun getScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> =
         if (isBuilt(start, board)) {
             scoreForPlayer(tilesCountOccupied)
@@ -38,6 +38,6 @@ class GameObjectRoad : GameObject(GameObjectType.ROAD) {
 
     override fun getFinalScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)
 }

@@ -1,7 +1,6 @@
 package app.services
 
-import app.context.IGameBoardReadTile
-import app.context.IGameBoardReadTileSpace
+import app.context.IGameBoardRead
 import app.entities.Tile
 import app.utils.Vec2
 
@@ -22,7 +21,7 @@ class TurnSuggester(
     private fun hasPossibleConnection(
         tile: Tile,
         cord: Vec2,
-        board: IGameBoardReadTile,
+        board: IGameBoardRead,
     ): Boolean {
         val adjCords = cord.getAdjacent()
         val adjTiles = mutableListOf<Tile>()
@@ -44,7 +43,7 @@ class TurnSuggester(
 
     override fun suggestTurn(
         tile: Tile,
-        board: IGameBoardReadTileSpace,
+        board: IGameBoardRead,
     ): List<Vec2> {
         val space = board.getFreeSpace()
         // Edge case. Starting tile has no adjacent tiles.

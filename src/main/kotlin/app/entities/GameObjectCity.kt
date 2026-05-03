@@ -1,6 +1,6 @@
 package app.entities
 
-import app.context.IGameBoardReadForObject
+import app.context.IGameBoardRead
 import app.utils.TileCoordinate
 
 /*
@@ -20,7 +20,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
 
     private fun checkIsBuilt(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): Boolean {
         if (!isBuilt) {
             val visited = mutableSetOf<TileCoordinate>()
@@ -45,7 +45,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
 
     override fun getScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> =
         if (checkIsBuilt(start, board)) {
             scoreForPlayer(scoreInc * tilesCountOccupied)
@@ -56,6 +56,6 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
     // 1 point for every tile
     override fun getFinalScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> = scoreForPlayer(tilesCountOccupied)
 }

@@ -82,15 +82,15 @@ internal class TileTest {
     @DisplayName("Tile get edges test")
     fun edgesTest() {
         val tile = Tile(TileLook(tileLookData, Rotation.STRAIGHT))
-        assert(tile.getDirType(Direction.UP) == GameObjectType.CITY)
-        assert(tile.getDirType(Direction.LEFT) == GameObjectType.FIELD)
-        assert(tile.getDirType(Direction.RIGHT) == GameObjectType.FIELD)
-        assert(tile.getDirType(Direction.DOWN) == GameObjectType.CROSSROAD)
+        assert(tile.getConnectionType(Direction.UP) == GameObjectType.CITY)
+        assert(tile.getConnectionType(Direction.LEFT) == GameObjectType.FIELD)
+        assert(tile.getConnectionType(Direction.RIGHT) == GameObjectType.FIELD)
+        assert(tile.getConnectionType(Direction.DOWN) == GameObjectType.CROSSROAD)
 
         tile.setRotation(Rotation.LEFT)
-        assert(tile.getDirType(Direction.UP) == GameObjectType.FIELD)
-        assert(tile.getDirType(Direction.LEFT) == GameObjectType.CITY)
-        assert(tile.getDirType(Direction.RIGHT) == GameObjectType.CROSSROAD)
-        assert(tile.getDirType(Direction.DOWN) == GameObjectType.FIELD)
+        assert(tile.getConnectionType(Direction.UP) == GameObjectType.FIELD)
+        assert(tile.getConnectionType(Direction.LEFT) == GameObjectType.CITY)
+        assert(tile.getConnectionType(Direction.RIGHT) == GameObjectType.CROSSROAD)
+        assert(tile.getConnectionType(Direction.DOWN) == GameObjectType.FIELD)
     }
 }

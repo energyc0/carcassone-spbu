@@ -8,39 +8,17 @@ import app.entities.Tile
 import app.utils.TileCoordinate
 import app.utils.Vec2
 
-interface IGameBoardReadObject {
+interface IGameBoardRead {
     fun getObject(coord: TileCoordinate): GameObject?
-
     fun getObjectDummy(coord: TileCoordinate): GameObjectDummy?
-}
-
-interface IGameBoardReadObjectType {
     fun getObjectType(coord: TileCoordinate): GameObjectType?
-}
-
-interface IGameBoardReadTile {
     fun getTile(coord: Vec2): Tile?
-}
-
-interface IGameBoardReadForObject :
-    IGameBoardReadTile,
-    IGameBoardReadObjectType,
-    IGameBoardReadObject
-
-interface IGameBoardReadForCounter :
-    IGameBoardReadForObject,
-    IGameBoardReadObject
-
-interface IGameBoardReadTileSpace : IGameBoardReadTile {
     fun getFreeSpace(): List<Vec2>
+
 }
 
 interface IGameBoardReadWrite :
-    IGameBoardReadObject,
-    IGameBoardReadObjectType,
-    IGameBoardReadTileSpace,
-    IGameBoardReadForObject,
-    IGameBoardReadForCounter {
+    IGameBoardRead {
     fun insertTile(
         newTile: Tile,
         coordinate: Vec2,

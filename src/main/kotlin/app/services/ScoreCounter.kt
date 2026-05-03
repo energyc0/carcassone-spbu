@@ -1,6 +1,6 @@
 package app.services
 
-import app.context.IGameBoardReadForCounter
+import app.context.IGameBoardRead
 import app.entities.Color
 import app.entities.GameObject
 import app.entities.GameObjectDummy
@@ -25,7 +25,7 @@ fun mergeColorIntMaps(
 class ScoreCounter : IScoreCounter {
     override fun countScore(
         lastCoord: Vec2,
-        board: IGameBoardReadForCounter,
+        board: IGameBoardRead,
     ): Map<Color, Int> {
         val visitedObj = mutableSetOf<GameObjectDummy>()
         var result = mutableMapOf<Color, Int>()
@@ -51,7 +51,7 @@ class ScoreCounter : IScoreCounter {
         coord: Vec2,
         visitedObj: MutableSet<GameObject>,
         result: MutableMap<Color, Int>,
-        board: IGameBoardReadForCounter,
+        board: IGameBoardRead,
     ) {
         for (x in 0..TILE_AREA_SAMPLES) {
             for (y in 0..TILE_AREA_SAMPLES) {
@@ -72,7 +72,7 @@ class ScoreCounter : IScoreCounter {
     }
 
     // Check every tile and count score for objects
-    override fun countFinalScore(board: IGameBoardReadForCounter): Map<Color, Int> {
+    override fun countFinalScore(board: IGameBoardRead): Map<Color, Int> {
         val visitedObj = mutableSetOf<GameObject>()
         val visitedTiles = mutableSetOf<Vec2>()
         val toVisit = ArrayDeque(listOf(Vec2(0, 0)))

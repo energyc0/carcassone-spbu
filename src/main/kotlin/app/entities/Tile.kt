@@ -2,8 +2,6 @@ package app.entities
 
 import app.services.Direction
 import app.utils.AreaCoordinate
-import app.utils.TILE_AREA_SAMPLES
-import app.utils.Vec2
 import app.utils.bottomCoordinates
 import app.utils.leftCoordinates
 import app.utils.rightCoordinates
@@ -13,8 +11,6 @@ class Tile(
     private val tileLook: TileLook,
     val isStarting: Boolean = false,
 ) {
-    var coords: Vec2? = null
-        private set
 
     fun getTileArea(cord: AreaCoordinate): GameObjectType = tileLook.getArea(cord)
 
@@ -25,15 +21,10 @@ class Tile(
         tileLook.setRotation(rotation)
     }
 
-    fun setTile(coord: Vec2) {
-        require(coords == null) { "Tile is already set. " }
-        coords = coord
-    }
-
     /**
      * Get type of the connection (GameObjectType) from the given direction.
      */
-    fun getDirType(direction: Direction): GameObjectType = tileLook.getDirType(direction)
+    fun getConnectionType(direction: Direction): GameObjectType = tileLook.getConnectionType(direction)
 
     /**
      * up, left, down, right from 0 to 3 indices

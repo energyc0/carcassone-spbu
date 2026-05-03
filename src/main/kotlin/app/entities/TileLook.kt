@@ -39,7 +39,7 @@ class TileLook(
         return areas[countCordIdx(curCord)]
     }
 
-    fun getDirType(direction: Direction): GameObjectType =
+    fun getConnectionType(direction: Direction): GameObjectType =
         when (direction) {
             Direction.RIGHT -> getArea(AreaCoordinate(TILE_AREA_SAMPLES - 1, MID_SAMPLE))
             Direction.LEFT -> getArea(AreaCoordinate(0, MID_SAMPLE))

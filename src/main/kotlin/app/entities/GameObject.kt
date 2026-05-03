@@ -1,6 +1,6 @@
 package app.entities
 
-import app.context.IGameBoardReadForObject
+import app.context.IGameBoardRead
 import app.utils.TileCoordinate
 import kotlin.collections.mutableMapOf
 
@@ -66,13 +66,13 @@ abstract class GameObject(
     /** Children need to implement checking whether the object is built and returning score */
     protected abstract fun getScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int>
 
     /** Children need to implement returning score */
     protected abstract fun getFinalScoreInternal(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int>
 
     /**
@@ -81,7 +81,7 @@ abstract class GameObject(
      */
     fun getScore(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> {
         if (hasGottenScore) {
             return mutableMapOf()
@@ -96,7 +96,7 @@ abstract class GameObject(
 
     fun getFinalScore(
         start: TileCoordinate,
-        board: IGameBoardReadForObject,
+        board: IGameBoardRead,
     ): MutableMap<Color, Int> {
         if (hasGottenScore) {
             return mutableMapOf()

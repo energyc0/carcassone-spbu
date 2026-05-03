@@ -120,15 +120,15 @@ internal class TileLookTest {
     @DisplayName("TileLook getDirType() test")
     fun getDirTypeTest() {
         val tileLook = TileLook(tileLookData1)
-        assert(tileLook.getDirType(Direction.UP) == GameObjectType.CITY)
-        assert(tileLook.getDirType(Direction.LEFT) == GameObjectType.FIELD)
-        assert(tileLook.getDirType(Direction.RIGHT) == GameObjectType.FIELD)
-        assert(tileLook.getDirType(Direction.DOWN) == GameObjectType.CROSSROAD)
+        assert(tileLook.getConnectionType(Direction.UP) == GameObjectType.CITY)
+        assert(tileLook.getConnectionType(Direction.LEFT) == GameObjectType.FIELD)
+        assert(tileLook.getConnectionType(Direction.RIGHT) == GameObjectType.FIELD)
+        assert(tileLook.getConnectionType(Direction.DOWN) == GameObjectType.CROSSROAD)
 
         tileLook.setRotation(Rotation.LEFT)
-        assert(tileLook.getDirType(Direction.UP) == GameObjectType.FIELD)
-        assert(tileLook.getDirType(Direction.LEFT) == GameObjectType.CITY)
-        assert(tileLook.getDirType(Direction.RIGHT) == GameObjectType.CROSSROAD)
-        assert(tileLook.getDirType(Direction.DOWN) == GameObjectType.FIELD)
+        assert(tileLook.getConnectionType(Direction.UP) == GameObjectType.FIELD)
+        assert(tileLook.getConnectionType(Direction.LEFT) == GameObjectType.CITY)
+        assert(tileLook.getConnectionType(Direction.RIGHT) == GameObjectType.CROSSROAD)
+        assert(tileLook.getConnectionType(Direction.DOWN) == GameObjectType.FIELD)
     }
 }

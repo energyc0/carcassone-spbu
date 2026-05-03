@@ -13,10 +13,10 @@ abstract class GameObjectDummy(
 abstract class GameObject(
     gameObjectType: GameObjectType,
 ) : GameObjectDummy(gameObjectType) {
-    private var _meeple = mutableListOf<Meeple>()
-    private var _rootTilesCountOccupied = 1
-    private var _hasGottenScore = false
-    private var _parentObj: GameObject? = null
+    private var parentMeeple = mutableListOf<Meeple>()
+    private var parentTilesOccupied = 1
+    private var parentHasGottenScore = false
+    private var actualParent: GameObject? = null
 
     init {
         require(type != GameObjectType.CROSSROAD) { "There cannot be GameObject of type \"CROSSROAD\"." }
@@ -24,42 +24,43 @@ abstract class GameObject(
 
     var tilesCountOccupied: Int
         get() {
-            return parent._rootTilesCountOccupied
+            return parent.parentTilesOccupied
         }
-        private set (value) {
-            parent._rootTilesCountOccupied = value
+        private set(value) {
+            parent.parentTilesOccupied = value
         }
 
-    private val meeple : MutableList<Meeple>
+    private val meeple: MutableList<Meeple>
         get() {
-            return parent._meeple
+            return parent.parentMeeple
         }
-    private var hasGottenScore : Boolean
-        get () {
-            return parent._hasGottenScore
+    private var hasGottenScore: Boolean
+        get() {
+            return parent.parentHasGottenScore
         }
-        set (value : Boolean) {
-            parent._hasGottenScore = value
+        set(value: Boolean) {
+            parent.parentHasGottenScore = value
         }
 
     /** Parent has always the same type as child GameObject */
-    protected var parent : GameObject
-        get () {
-            var curParent = _parentObj ?: return this
+    protected var parent: GameObject
+        get() {
+            var curParent = actualParent ?: return this
 
-            while (curParent._parentObj != null) {
-                val newParent = curParent._parentObj ?: break
+            while (curParent.actualParent != null) {
+                val newParent = curParent.actualParent ?: break
                 curParent = newParent
-                _parentObj = curParent
+                actualParent = curParent
             }
 
             return curParent
         }
-        set (value) {
-            if (_parentObj == null)
-                _parentObj = value.parent
-            else
-                _parentObj?._parentObj = value.parent
+        set(value) {
+            if (actualParent == null) {
+                actualParent = value.parent
+            } else {
+                actualParent?.actualParent = value.parent
+            }
         }
 
     /** Children need to implement checking whether the object is built and returning score */
@@ -82,8 +83,9 @@ abstract class GameObject(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
-        if (hasGottenScore)
+        if (hasGottenScore) {
             return mutableMapOf()
+        }
         val score = parent.getScoreInternal(start, board)
         if (score.isNotEmpty()) {
             hasGottenScore = true
@@ -96,8 +98,9 @@ abstract class GameObject(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
     ): MutableMap<Color, Int> {
-        if (hasGottenScore)
+        if (hasGottenScore) {
             return mutableMapOf()
+        }
         val score = parent.getFinalScoreInternal(start, board)
         hasGottenScore = true
         parent.returnMeeple()
@@ -141,8 +144,9 @@ abstract class GameObject(
      * Throw IllegalStateException if object already has meeple.
      */
     fun addMeep(meep: Meeple) {
-        if (hasMeeple())
+        if (hasMeeple()) {
             throw IllegalStateException("Object has already meeple.")
+        }
         meeple.addLast(meep)
     }
 
@@ -155,7 +159,5 @@ abstract class GameObject(
         return false
     }
 
-    override fun hashCode(): Int {
-        return System.identityHashCode(parent)
-    }
+    override fun hashCode(): Int = System.identityHashCode(parent)
 }

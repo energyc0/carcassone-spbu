@@ -21,11 +21,23 @@ internal class TileCoordinateTest {
         val left = v.getAdjacent(Direction.LEFT)
         val leftExpected = TileCoordinate(v.tileCoord, AreaCoordinate(v.areaCoord.x - 1, 0))
         val right = v.getAdjacent(Direction.RIGHT)
-        val rightExpected = TileCoordinate(Vec2(v.tileCoord.x + 1, v.tileCoord.y), AreaCoordinate(0, v.areaCoord.y))
+        val rightExpected =
+            TileCoordinate(
+                Vec2(v.tileCoord.x + 1, v.tileCoord.y),
+                AreaCoordinate(0, v.areaCoord.y),
+            )
         val up = v.getAdjacent(Direction.UP)
-        val upExpected = TileCoordinate(Vec2(v.tileCoord.x, v.tileCoord.y + 1), AreaCoordinate(v.areaCoord.x, TILE_AREA_SAMPLES - 1))
+        val upExpected =
+            TileCoordinate(
+                Vec2(v.tileCoord.x, v.tileCoord.y + 1),
+                AreaCoordinate(v.areaCoord.x, TILE_AREA_SAMPLES - 1),
+            )
         val down = v.getAdjacent(Direction.DOWN)
-        val downExpected = TileCoordinate(v.tileCoord, AreaCoordinate(v.areaCoord.x, v.areaCoord.y + 1))
+        val downExpected =
+            TileCoordinate(
+                v.tileCoord,
+                AreaCoordinate(v.areaCoord.x, v.areaCoord.y + 1),
+            )
 
         assert(right == rightExpected)
         assert(left == leftExpected)

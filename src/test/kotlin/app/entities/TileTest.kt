@@ -41,7 +41,11 @@ internal class TileTest {
     fun rotatedLookTest() {
         val tile = Tile(TileLook(tileLookData, Rotation.LEFT))
         for (i in 0..<TILE_AREA_SAMPLES_TOTAL) {
-            val coord = AreaCoordinate(i / TILE_AREA_SAMPLES, TILE_AREA_SAMPLES - (i % TILE_AREA_SAMPLES) - 1)
+            val coord =
+                AreaCoordinate(
+                    i / TILE_AREA_SAMPLES,
+                    TILE_AREA_SAMPLES - (i % TILE_AREA_SAMPLES) - 1,
+                )
             assert(tile.getTileArea(coord) == tileLookData1[i])
         }
 
@@ -53,13 +57,21 @@ internal class TileTest {
 
         tile.setRotation(Rotation.RIGHT)
         for (i in 0..<TILE_AREA_SAMPLES_TOTAL) {
-            val coord = AreaCoordinate(TILE_AREA_SAMPLES - i / TILE_AREA_SAMPLES - 1, TILE_AREA_SAMPLES - (i % TILE_AREA_SAMPLES) - 1)
+            val coord =
+                AreaCoordinate(
+                    TILE_AREA_SAMPLES - i / TILE_AREA_SAMPLES - 1,
+                    TILE_AREA_SAMPLES - (i % TILE_AREA_SAMPLES) - 1,
+                )
             assert(tile.getTileArea(coord) == tileLookData1[i])
         }
 
         tile.setRotation(Rotation.FLIPPED)
         for (i in 0..<TILE_AREA_SAMPLES_TOTAL) {
-            val coord = AreaCoordinate(TILE_AREA_SAMPLES - i % TILE_AREA_SAMPLES - 1, TILE_AREA_SAMPLES - i / TILE_AREA_SAMPLES - 1)
+            val coord =
+                AreaCoordinate(
+                    TILE_AREA_SAMPLES - i % TILE_AREA_SAMPLES - 1,
+                    TILE_AREA_SAMPLES - i / TILE_AREA_SAMPLES - 1,
+                )
             val dataIdx = coord.x + coord.y * TILE_AREA_SAMPLES
             val tileCoord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
             assert(tile.getTileArea(tileCoord) == tileLookData1[dataIdx])

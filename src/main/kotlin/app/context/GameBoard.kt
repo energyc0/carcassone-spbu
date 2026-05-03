@@ -27,10 +27,13 @@ class GameBoard(
      * Merge adjacent objects of the same type on the GameBoard and return a new one.
      * The given startCoord may not contain adjacent initialized values.
      */
-    private fun mergeObjects(startCoord: TileCoordinate, objectType: GameObjectType,): GameObjectDummy {
+    private fun mergeObjects(
+        startCoord: TileCoordinate,
+        objectType: GameObjectType,
+    ): GameObjectDummy {
         val resultObjectDummy = GameObjectFactory().createObject(objectType)
         gameObjects[startCoord.tileCoord]?.objects[startCoord.areaCoord] = resultObjectDummy
-        /* There may be CROSSROAD, need to check */
+        // There may be CROSSROAD, need to check
         val resultObject = resultObjectDummy as? GameObject ?: return resultObjectDummy
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(startCoord))
@@ -61,8 +64,9 @@ class GameBoard(
             curCoord.getAdjacent().forEach { i ->
                 if (!visited.contains(i)) {
                     val curType = getObjectType(i)
-                    if (curType == objectType)
+                    if (curType == objectType) {
                         toVisit.addLast(i)
+                    }
                 }
             }
         }
@@ -84,14 +88,14 @@ class GameBoard(
         coordinate.getAdjacent().forEach { adj -> if (!gameObjects.contains(adj)) freeSpace.add(adj) }
         freeSpace.remove(coordinate)
 
-
         for (x in 0..<TILE_AREA_SAMPLES) {
             for (y in 0..<TILE_AREA_SAMPLES) {
                 val areaCoord = AreaCoordinate(x, y)
                 val tileCoordinate = TileCoordinate(coordinate, areaCoord)
                 val type = newTile.getTileArea(areaCoord)
-                if (tileObjects[areaCoord] == null)
+                if (tileObjects[areaCoord] == null) {
                     tileObjects[areaCoord] = mergeObjects(tileCoordinate, type)
+                }
             }
         }
     }
@@ -117,9 +121,10 @@ class GameBoard(
         m: Meeple,
         coord: TileCoordinate,
     ) {
-        val objDummy = getObjectDummy(coord) ?: throw IllegalArgumentException("There is no tile.")
-        if (objDummy.type == GameObjectType.CROSSROAD)
-            throw IllegalArgumentException("Cannot set meeple to CROSSROAD")
+        val objDummy = getObjectDummy(coord)
+        if (objDummy == null || objDummy.type == GameObjectType.CROSSROAD) {
+            throw IllegalArgumentException("Cannot set meeple to there.")
+        }
         val obj = objDummy as GameObject
         if (obj.hasMeeple()) {
             throw IllegalArgumentException("Object already has meeple")
@@ -149,5 +154,8 @@ class GameBoard(
     override fun getObjectDummy(coord: TileCoordinate): GameObjectDummy? = gameObjects[coord.tileCoord]?.objects[coord.areaCoord]
 
     /** Get object type using tile */
-    override fun getObjectType(coord: TileCoordinate): GameObjectType? = gameObjects[coord.tileCoord]?.tile?.getTileArea(coord.areaCoord)
+    override fun getObjectType(coord: TileCoordinate): GameObjectType? {
+        val tile = getTile(coord.tileCoord)
+        return tile?.getTileArea(coord.areaCoord)
+    }
 }

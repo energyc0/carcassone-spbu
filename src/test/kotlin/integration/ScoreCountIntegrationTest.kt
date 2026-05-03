@@ -36,61 +36,53 @@ internal class ScoreCountIntegrationTest {
         objectFactory = GameObjectFactory()
     }
 
-    private fun createArrayWithHorizontalRoad() : Array<GameObjectType> {
-        return Array(TILE_AREA_SAMPLES_TOTAL) { i->
+    private fun createArrayWithHorizontalRoad(): Array<GameObjectType> =
+        Array(TILE_AREA_SAMPLES_TOTAL) { i ->
             val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.y == MID_SAMPLE)
+            if (coord.y == MID_SAMPLE) {
                 GameObjectType.ROAD
-            else
+            } else {
                 GameObjectType.FIELD
+            }
         }
-    }
 
-    private fun createMonasteryField() : Array<GameObjectType> {
-        return Array(TILE_AREA_SAMPLES_TOTAL) { i->
+    private fun createMonasteryField(): Array<GameObjectType> =
+        Array(TILE_AREA_SAMPLES_TOTAL) { i ->
             val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord == AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
+            if (coord == AreaCoordinate(MID_SAMPLE, MID_SAMPLE)) {
                 GameObjectType.MONASTERY
-            else
+            } else {
                 GameObjectType.FIELD
+            }
         }
-    }
 
-    private fun createMonasteryTile() : Tile {
-        return Tile(TileLook(createMonasteryField()))
-    }
+    private fun createMonasteryTile(): Tile = Tile(TileLook(createMonasteryField()))
 
-    private fun createField() : Array<GameObjectType> {
-        return Array(TILE_AREA_SAMPLES_TOTAL) { GameObjectType.FIELD }
-    }
+    private fun createField(): Array<GameObjectType> = Array(TILE_AREA_SAMPLES_TOTAL) { GameObjectType.FIELD }
 
-    private fun createFieldTile() : Tile {
-        return Tile(TileLook(createField()))
-    }
+    private fun createFieldTile(): Tile = Tile(TileLook(createField()))
 
-    private fun createCity() : Array<GameObjectType> {
-        return Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+    private fun createCity(): Array<GameObjectType> =
+        Array(TILE_AREA_SAMPLES_TOTAL) { i ->
             val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.y < MID_SAMPLE && 0 < coord.x && coord.x < TILE_AREA_SAMPLES-1) GameObjectType.CITY
-            else GameObjectType.FIELD
+            if (coord.y < MID_SAMPLE && 0 < coord.x && coord.x < TILE_AREA_SAMPLES - 1) {
+                GameObjectType.CITY
+            } else {
+                GameObjectType.FIELD
+            }
         }
-    }
 
-    private fun createCityTile() : Tile {
-        return Tile(TileLook(createCity()))
-    }
+    private fun createCityTile(): Tile = Tile(TileLook(createCity()))
 
-    private fun createArrayWithHorizontalRoadCrossroad() : Array<GameObjectType>{
+    private fun createArrayWithHorizontalRoadCrossroad(): Array<GameObjectType> {
         val data = createArrayWithHorizontalRoad()
         data[MID_SAMPLE + MID_SAMPLE * TILE_AREA_SAMPLES] = GameObjectType.CROSSROAD
         return data
     }
-    private fun createTileWithHorizontalRoad() : Tile {
-        return Tile(TileLook(createArrayWithHorizontalRoad()))
-    }
-    private fun createTileWithHorizontalRoadCrossroad() : Tile {
-        return Tile(TileLook(createArrayWithHorizontalRoadCrossroad()))
-    }
+
+    private fun createTileWithHorizontalRoad(): Tile = Tile(TileLook(createArrayWithHorizontalRoad()))
+
+    private fun createTileWithHorizontalRoadCrossroad(): Tile = Tile(TileLook(createArrayWithHorizontalRoadCrossroad()))
 
     @Test
     @DisplayName("Simple road with 4 tiles should give 4 points and do not give more")
@@ -107,7 +99,7 @@ internal class ScoreCountIntegrationTest {
         board.insertTile(tileRightCrossroad, lastCoord)
 
         val meeple = Meeple(Color.RED)
-        val roadCoord = TileCoordinate(Vec2(0,0), AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
+        val roadCoord = TileCoordinate(Vec2(0, 0), AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
         board.setMeeple(meeple, roadCoord)
 
         val scores = scoreCounter.countScore(lastCoord, board)
@@ -131,7 +123,7 @@ internal class ScoreCountIntegrationTest {
         board.insertTile(tile2, lastCoord)
 
         val meeple = Meeple(Color.RED)
-        val roadCoord = TileCoordinate(Vec2(0,0), AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
+        val roadCoord = TileCoordinate(Vec2(0, 0), AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
         board.setMeeple(meeple, roadCoord)
 
         val emptyScores = scoreCounter.countScore(lastCoord, board)
@@ -150,19 +142,20 @@ internal class ScoreCountIntegrationTest {
 
         board.insertTile(monasteryTile, Vec2(0, 0))
 
-        val coordToInsert = arrayOf(
-            Vec2(0,1),
-            Vec2(0,-1),
-            Vec2(1,0),
-            Vec2(-1,0),
-            Vec2(1,1),
-            Vec2(1,-1),
-            Vec2(-1,1),
-            Vec2(-1,-1))
+        val coordToInsert =
+            arrayOf(
+                Vec2(0, 1),
+                Vec2(0, -1),
+                Vec2(1, 0),
+                Vec2(-1, 0),
+                Vec2(1, 1),
+                Vec2(1, -1),
+                Vec2(-1, 1),
+                Vec2(-1, -1),
+            )
         for (v in coordToInsert) {
             board.insertTile(createFieldTile(), v)
         }
-
 
         val monasteryCoord = TileCoordinate(Vec2(0, 0), AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
         val meeple = Meeple(Color.GREEN)
@@ -181,24 +174,24 @@ internal class ScoreCountIntegrationTest {
         val tileLeftCrossroad = createTileWithHorizontalRoadCrossroad()
         val tileRightCrossroad = createTileWithHorizontalRoadCrossroad()
 
-        /* Start tile */
+        // Start tile
         board.insertTile(tile1, Vec2(0, 0))
-        /* Insert field tiles above */
+        // Insert field tiles above
         for (x in arrayOf(0, -1, 1, 2)) {
             board.insertTile(createFieldTile(), Vec2(x, 1))
         }
-        /* Insert crossroad and set tile */
+        // Insert crossroad and set tile
         board.insertTile(tileLeftCrossroad, Vec2(-1, 0))
-        val roadCoord1 = TileCoordinate(Vec2(0,0), AreaCoordinate(MID_SAMPLE+1, MID_SAMPLE))
+        val roadCoord1 = TileCoordinate(Vec2(0, 0), AreaCoordinate(MID_SAMPLE + 1, MID_SAMPLE))
         val meepleRed = Meeple(Color.RED)
         board.setMeeple(meepleRed, roadCoord1)
 
-        /* Set second player meeple and connect roads */
+        // Set second player meeple and connect roads
         board.insertTile(tileRightCrossroad, Vec2(2, 0))
-        val roadCoord2 = TileCoordinate(Vec2(2, 0), AreaCoordinate(MID_SAMPLE-1, MID_SAMPLE))
+        val roadCoord2 = TileCoordinate(Vec2(2, 0), AreaCoordinate(MID_SAMPLE - 1, MID_SAMPLE))
         val meepleBlue = Meeple(Color.BLUE)
         board.setMeeple(meepleBlue, roadCoord2)
-        val lastCoord = Vec2(1,0)
+        val lastCoord = Vec2(1, 0)
         board.insertTile(tile2, lastCoord)
 
         val scores = scoreCounter.countScore(lastCoord, board)
@@ -227,15 +220,15 @@ internal class ScoreCountIntegrationTest {
         assert(scoreCounter.countScore(Vec2(0, 1), board).isEmpty())
         board.insertTile(fieldTile, Vec2(0, 2))
 
-        val fieldCoord = TileCoordinate(Vec2(0,2), AreaCoordinate(0,0))
+        val fieldCoord = TileCoordinate(Vec2(0, 2), AreaCoordinate(0, 0))
         val fieldMeeple = Meeple(Color.BLUE)
         board.setMeeple(fieldMeeple, fieldCoord)
 
         val finalScores = scoreCounter.countFinalScore(board)
         assertEquals(1, finalScores.size)
         assertEquals(3, finalScores[Color.BLUE])
-        assert(scoreCounter.countScore(Vec2(0,2), board).isEmpty())
-       //val finalScores = scoreCounter.countFinalScore(board)
+        assert(scoreCounter.countScore(Vec2(0, 2), board).isEmpty())
+        // val finalScores = scoreCounter.countFinalScore(board)
         assertEquals(1, finalScores.size)
         assertEquals(3, finalScores[Color.BLUE])
     }

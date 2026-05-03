@@ -1,3 +1,3 @@
 package app.entities
 
-class GameObjectCrossroad : GameObjectDummy(GameObjectType.CROSSROAD) {}
+class GameObjectCrossroad : GameObjectDummy(GameObjectType.CROSSROAD)

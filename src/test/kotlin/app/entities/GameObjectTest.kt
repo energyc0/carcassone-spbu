@@ -34,7 +34,7 @@ internal class GameObjectTest {
         }
 
         GameObjectType.entries.forEach { type ->
-           assert(type == factory.createObject(type).type)
+            assert(type == factory.createObject(type).type)
         }
     }
 

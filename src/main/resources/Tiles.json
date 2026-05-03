@@ -3,150 +3,150 @@
     {
       "id" : "Monastery_Road",
       "image" : "Base_Game_C3_Tile_A.png",
-      "tile_areas" : "FFFFF FFFFF FFMRF FFRRF FFRFF",
+      "tileAreas" : "FFFFF FFFFF FFMRF FFRRF FFRFF",
       "count" : 2
     },
     {
       "id" : "Monastery",
       "image" : "Base_Game_C3_Tile_B.png",
-      "tile_areas" : "FFFFF FFFFF FFMFF FFFFF FFFFF",
+      "tileAreas" : "FFFFF FFFFF FFMFF FFFFF FFFFF",
       "count" : 4
     },
     {
       "id" : "City_Shield01",
       "image" : "Base_Game_C3_Tile_C.png",
-      "tile_areas" : "CCCCC CCCCC CCCCC CCCCC CCCCC",
+      "tileAreas" : "CCCCC CCCCC CCCCC CCCCC CCCCC",
       "count" : 1
     },
     {
       "id" : "City_Road01",
       "image" : "Base_Game_C3_Tile_D.png",
-      "tile_areas" : "CCCCC FFFFF RRRRR FFFFF FFFFF",
+      "tileAreas" : "CCCCC FFFFF RRRRR FFFFF FFFFF",
       "count" : 4
     },
     {
       "id" : "City01",
       "image" : "Base_Game_C3_Tile_E.png",
-      "tile_areas" : "CCCCC FCCCF FFCFF FFFFF FFFFF",
+      "tileAreas" : "CCCCC FCCCF FFCFF FFFFF FFFFF",
       "count" : 5
     },
     {
       "id" : "City_Shield02",
       "image" : "Base_Game_C3_Tile_F.png",
-      "tile_areas" : "CFFFC CCFCC CCCCC CCFCC CFFFC",
+      "tileAreas" : "CFFFC CCFCC CCCCC CCFCC CFFFC",
       "count" : 2
     },
     {
       "id" : "City02",
       "image" : "Base_Game_C3_Tile_G.png",
-      "tile_areas" : "CFFFC CCFCC CCCCC CCFCC CFFFC",
+      "tileAreas" : "CFFFC CCFCC CCCCC CCFCC CFFFC",
       "count" : 1
     },
     {
       "id" : "City03",
       "image" : "Base_Game_C3_Tile_H.png",
-      "tile_areas" : "CCCCC FCCCF FFFFF FCCCF CCCCC",
+      "tileAreas" : "CCCCC FCCCF FFFFF FCCCF CCCCC",
       "count" : 3
     },
     {
       "id" : "City04",
       "image" : "Base_Game_C3_Tile_I.png",
-      "tile_areas" : "CCCCC CCFFF CCFFF CCFFF CFFFF",
+      "tileAreas" : "CCCCC CCFFF CCFFF CCFFF CFFFF",
       "count" : 2
     },
     {
       "id" : "City_Road02",
       "image" : "Base_Game_C3_Tile_J.png",
-      "tile_areas" : "CCCCC FFCFF FFRRR FFRFF FFRFF",
+      "tileAreas" : "CCCCC FFCFF FFRRR FFRFF FFRFF",
       "count" : 3
     },
     {
       "id" : "City_Road03",
       "image" : "Base_Game_C3_Tile_K.png",
-      "tile_areas" : "CCCCC FFCFF RRRFF FFRFF FFRFF",
+      "tileAreas" : "CCCCC FFCFF RRRFF FFRFF FFRFF",
       "count" : 3
     },
     {
       "id" : "City_Crossroad01",
       "image" : "Base_Game_C3_Tile_L.png",
-      "tile_areas" : "CCCCC FFFFF RRXRR FFRFF FFRFF",
+      "tileAreas" : "CCCCC FFFFF RRXRR FFRFF FFRFF",
       "count" : 3
     },
     {
       "id" : "City_Shield03",
       "image" : "Base_Game_C3_Tile_M.png",
-      "tile_areas" : "CCCCC FCCCC FFCCC FFFCC FFFFC",
+      "tileAreas" : "CCCCC FCCCC FFCCC FFFCC FFFFC",
       "count" : 2
     },
     {
       "id" : "City05",
       "image" : "Base_Game_C3_Tile_N.png",
-      "tile_areas" : "CCCCC FCCCC FFCCC FFFCC FFFFC",
+      "tileAreas" : "CCCCC FCCCC FFCCC FFFCC FFFFC",
       "count" : 3
     },
     {
       "id" : "City_Shield04",
       "image" : "Base_Game_C3_Tile_O.png",
-      "tile_areas" : "CCCCF CFFFF CFRRR CCRFF CFRFF",
+      "tileAreas" : "CCCCF CFFFF CFRRR CCRFF CFRFF",
       "count" : 2
     },
     {
       "id" : "City06",
       "image" : "Base_Game_C3_Tile_P.png",
-      "tile_areas" : "CCCCF CFFFF CFRRR CCRFF CFRFF",
+      "tileAreas" : "CCCCF CFFFF CFRRR CCRFF CFRFF",
       "count" : 3
     },
     {
       "id" : "City_Shield05",
       "image" : "Base_Game_C3_Tile_Q.png",
-      "tile_areas" : "CCCCC CCCCC CCCCC CCFCC CFFFC",
+      "tileAreas" : "CCCCC CCCCC CCCCC CCFCC CFFFC",
       "count" : 1
     },
     {
       "id" : "City07",
       "image" : "Base_Game_C3_Tile_R.png",
-      "tile_areas" : "CCCCC CCCCC CCCCC CCFCC CFFFC",
+      "tileAreas" : "CCCCC CCCCC CCCCC CCFCC CFFFC",
       "count" : 3
     },
     {
       "id" : "City_Shield06",
       "image" : "Base_Game_C3_Tile_S.png",
-      "tile_areas" : "CCCCC CCCCC CCCCC CCRCC CFRFC",
+      "tileAreas" : "CCCCC CCCCC CCCCC CCRCC CFRFC",
       "count" : 2
     },
     {
       "id" : "City08",
       "image" : "Base_Game_C3_Tile_T.png",
-      "tile_areas" : "CCCCC CCCCC CCCCC CCRCC CFRFC",
+      "tileAreas" : "CCCCC CCCCC CCCCC CCRCC CFRFC",
       "count" : 1
     },
     {
       "id" : "Road01",
       "image" : "Base_Game_C3_Tile_U.png",
-      "tile_areas" : "FFRFF FFRFF FFRFF FFRFF FFRFF",
+      "tileAreas" : "FFRFF FFRFF FFRFF FFRFF FFRFF",
       "count" : 8
     },
     {
       "id" : "Road02",
       "image" : "Base_Game_C3_Tile_V.png",
-      "tile_areas" : "FFFFF FFFFF RRRFF FFRFF FFRFF",
+      "tileAreas" : "FFFFF FFFFF RRRFF FFRFF FFRFF",
       "count" : 9
     },
     {
       "id" : "Road03",
       "image" : "Base_Game_C3_Tile_W.png",
-      "tile_areas" : "FFFFF FFFFF RRXRR FFRFF FFRFF",
+      "tileAreas" : "FFFFF FFFFF RRXRR FFRFF FFRFF",
       "count" : 4
     },
     {
       "id" : "Road04",
       "image" : "Base_Game_C3_Tile_X.png",
-      "tile_areas" : "FFRFF FFRFF RRXRR FFRFF FFRFF",
+      "tileAreas" : "FFRFF FFRFF RRXRR FFRFF FFRFF",
       "count" : 1
     }
   ],
-  "tile_options" : {
-    "starting_tiles" : ["City_Road01"],
-    "has_shield" : ["City_Shield01", "City_Shield02", "City_Shield03", "City_Shield04", "City_Shield05", "City_Shield06"]
+  "tileOptions" : {
+    "startingTiles" : ["City_Road01"],
+    "hasShield" : ["City_Shield01", "City_Shield02", "City_Shield03", "City_Shield04", "City_Shield05", "City_Shield06"]
   }
 }

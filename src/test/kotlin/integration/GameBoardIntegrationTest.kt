@@ -30,15 +30,15 @@ internal class GameBoardIntegrationTest {
     private lateinit var gameBoard: GameBoard
     private lateinit var gameRules: GameRules
 
-    private fun createArrayWithHorizontalRoad() : Array<GameObjectType> {
-        return Array(TILE_AREA_SAMPLES_TOTAL) { i->
+    private fun createArrayWithHorizontalRoad(): Array<GameObjectType> =
+        Array(TILE_AREA_SAMPLES_TOTAL) { i ->
             val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.y == MID_SAMPLE)
+            if (coord.y == MID_SAMPLE) {
                 GameObjectType.ROAD
-            else
+            } else {
                 GameObjectType.FIELD
+            }
         }
-    }
 
     @BeforeEach
     fun setUp() {

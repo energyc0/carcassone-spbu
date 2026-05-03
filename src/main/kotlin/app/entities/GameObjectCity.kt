@@ -10,7 +10,7 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
     private var _isBuilt = false
     private val scoreInc = 2
 
-    var isBuilt : Boolean
+    var isBuilt: Boolean
         get() {
             return (parent as GameObjectCity)._isBuilt
         }
@@ -21,34 +21,37 @@ class GameObjectCity : GameObject(GameObjectType.CITY) {
     private fun checkIsBuilt(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ) : Boolean {
-        if (isBuilt) return true
-        val visited = mutableSetOf<TileCoordinate>()
-        val toVisit = ArrayDeque(listOf(start))
+    ): Boolean {
+        if (!isBuilt) {
+            val visited = mutableSetOf<TileCoordinate>()
+            val toVisit = ArrayDeque(listOf(start))
 
-        while (toVisit.isNotEmpty()) {
-            val curCoord = toVisit.removeFirst()
-            visited.add(curCoord)
+            while (toVisit.isNotEmpty()) {
+                val curCoord = toVisit.removeFirst()
+                visited.add(curCoord)
 
-            val t = board.getObjectType(curCoord) ?: return false
+                val t = board.getObjectType(curCoord) ?: return false
 
-            curCoord.getAdjacent().forEach { i ->
-                if (!visited.contains(i) && t == type) {
-                    toVisit.addLast(i)
+                curCoord.getAdjacent().forEach { i ->
+                    if (!visited.contains(i) && t == type) {
+                        toVisit.addLast(i)
+                    }
                 }
             }
+            isBuilt = true
         }
-        isBuilt = true
         return true
     }
 
     override fun getScoreInternal(
         start: TileCoordinate,
         board: IGameBoardReadForObject,
-    ): MutableMap<Color, Int> {
-        return if (checkIsBuilt(start, board)) scoreForPlayer(scoreInc * tilesCountOccupied)
-        else mutableMapOf()
-    }
+    ): MutableMap<Color, Int> =
+        if (checkIsBuilt(start, board)) {
+            scoreForPlayer(scoreInc * tilesCountOccupied)
+        } else {
+            mutableMapOf()
+        }
 
     // 1 point for every tile
     override fun getFinalScoreInternal(

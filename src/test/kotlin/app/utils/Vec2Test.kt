@@ -3,7 +3,6 @@ package app.utils
 import app.services.Direction
 import org.junit.jupiter.api.DisplayName
 import kotlin.math.abs
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 internal class Vec2Test {
@@ -28,10 +27,10 @@ internal class Vec2Test {
         val vec3: Vec2 = Vec2(0, 1)
         val vec4: Vec2 = Vec2(-1, 0)
 
-        assert(vec1.getDirection(vec2) == Direction.RIGHT)
-        assert(vec1.getDirection(vec3) == Direction.UP)
-        assert(vec1.getDirection(vec4) == Direction.LEFT)
-        assert(vec3.getDirection(vec1) == Direction.DOWN)
+        assert(vec1.getDirectionTo(vec2) == Direction.RIGHT)
+        assert(vec1.getDirectionTo(vec3) == Direction.UP)
+        assert(vec1.getDirectionTo(vec4) == Direction.LEFT)
+        assert(vec3.getDirectionTo(vec1) == Direction.DOWN)
     }
 
     @Test

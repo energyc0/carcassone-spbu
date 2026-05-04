@@ -24,4 +24,10 @@ interface IGameRules {
         to: Tile,
         from: Direction,
     ): Boolean
+
+    fun havePossibleConnections(
+        tile: Tile,
+        to: Tile,
+        from: Direction,
+    ) : Boolean
 }

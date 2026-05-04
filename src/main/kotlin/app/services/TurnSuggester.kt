@@ -1,6 +1,7 @@
 package app.services
 
 import app.context.IGameBoardRead
+import app.entities.GameObjectType
 import app.entities.Tile
 import app.utils.Vec2
 
@@ -18,29 +19,6 @@ class TurnSuggester(
         return tileEdges.any { it contentEquals toEdge }
     }
 
-    private fun hasPossibleConnection(
-        tile: Tile,
-        cord: Vec2,
-        board: IGameBoardRead,
-    ): Boolean {
-        val adjCords = cord.getAdjacent()
-        val adjTiles = mutableListOf<Tile>()
-
-        adjCords.forEach {
-            val temp = board.getTile(it)
-            if (temp != null) adjTiles.add(temp)
-        }
-        if (adjTiles.isEmpty()) {
-            throw IllegalStateException("There must be at least one adjacent tile.")
-        }
-
-        return adjTiles.any {
-            val toCords = it.coords ?: throw IllegalStateException("Tile in the board must have coordinates.")
-            val dir = cord.getDirection(toCords)
-            canBeConnected(tile, it, dir)
-        }
-    }
-
     override fun suggestTurn(
         tile: Tile,
         board: IGameBoardRead,
@@ -51,9 +29,21 @@ class TurnSuggester(
             return space
         }
 
+        val connections = Direction.entries.map { dir -> tile.getConnectionType(dir) }
         val suggest = mutableListOf<Vec2>()
 
-        space.forEach { if (hasPossibleConnection(tile, it, board)) suggest.add(it) }
+        space.forEach { freeCoord ->
+            val hasValidConnection = freeCoord.getAdjacent().any { tileCoord ->
+                val toTile = board.getTile(tileCoord)
+                toTile != null && gameRules.havePossibleConnections(
+                    tile,
+                    toTile,
+                    tileCoord.getDirectionTo(freeCoord)
+                )
+            }
+            if (hasValidConnection)
+                suggest.add(freeCoord)
+        }
 
         return suggest.toList()
     }

@@ -111,7 +111,7 @@ class GameBoard(
                     val toTile =
                         gameObjects[curCoord]?.tile
                             ?: throw IllegalStateException("GameBoard cannot be empty.")
-                    val dir = curCoord.getDirection(coordinate)
+                    val dir = curCoord.getDirectionTo(coordinate)
                     gameRules.canConnect(newTile, toTile, dir)
                 }
         )

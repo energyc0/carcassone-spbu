@@ -21,7 +21,7 @@ data class Vec2(
     /*
      * It is only usable for adjacent coordinates.
      */
-    fun getDirection(to: Vec2): Direction {
+    fun getDirectionTo(to: Vec2): Direction {
         val dx = to.x - x
         if (dx == 0) {
             val dy = to.y - y

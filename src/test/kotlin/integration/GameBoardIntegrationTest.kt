@@ -2,6 +2,8 @@ package integration
 
 import app.context.GameBoard
 import app.entities.Color
+import app.entities.GameObject
+import app.entities.GameObjectCity
 import app.entities.GameObjectType
 import app.entities.Meeple
 import app.entities.Player
@@ -266,5 +268,28 @@ internal class GameBoardIntegrationTest {
             assertEquals(positions.size, tilesOccupied)
             assert(gameBoard.getObject(curCoord)?.hasMeeple() == true)
         }
+    }
+
+    @Test
+    @DisplayName("Test merge two cities with shields - count shields correctly")
+    fun mergeCityShields() {
+        val cityData = Array(TILE_AREA_SAMPLES_TOTAL) { i -> GameObjectType.CITY }
+        val shield = setOf(AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
+        val tile1 = Tile(TileLook(cityData, Rotation.STRAIGHT, shield))
+        val tile2 = Tile(TileLook(cityData, Rotation.STRAIGHT, shield))
+
+        val cityCoord1 = TileCoordinate(Vec2(0, 0), AreaCoordinate(0, 0))
+        gameBoard.insertTile(tile1, cityCoord1.tileCoord)
+        assert((gameBoard.getObject(cityCoord1) as GameObjectCity).shieldsCount == 1)
+
+        val cityCoord2 = TileCoordinate(Vec2(1, 0), AreaCoordinate(0, 0))
+        gameBoard.insertTile(tile2, cityCoord2.tileCoord)
+        assert((gameBoard.getObject(cityCoord2) as GameObjectCity).shieldsCount == 2)
+
+        val mergedCityCoord = TileCoordinate(Vec2(0, 0), AreaCoordinate(0, 0))
+        val mergedCity = gameBoard.getObject(mergedCityCoord) as GameObjectCity
+
+        assertEquals(2, mergedCity.shieldsCount)
+        assertEquals(2, mergedCity.tilesCountOccupied)
     }
 }

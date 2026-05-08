@@ -14,6 +14,7 @@ enum class Rotation { STRAIGHT, RIGHT, LEFT, FLIPPED }
 class TileLook(
     private val areas: Array<GameObjectType>,
     rot: Rotation = Rotation.STRAIGHT,
+    val shields: Set<AreaCoordinate> = setOf(),
 ) {
     companion object {
         const val MID_SAMPLE = TILE_AREA_SAMPLES / 2
@@ -23,7 +24,9 @@ class TileLook(
         private set
 
     init {
-        require(areas.size == TILE_AREA_SAMPLES_TOTAL) { "Tile must contain ${TILE_AREA_SAMPLES_TOTAL} TileArea\'s" }
+        require(areas.size == TILE_AREA_SAMPLES_TOTAL) { "Tile must contain $TILE_AREA_SAMPLES_TOTAL TileArea\'s" }
+        require(shields.all { coord -> getArea(coord) == GameObjectType.CITY })
+        { "Expected shields in cities (GameObjectType == CITY)." }
     }
 
     fun setRotation(rot: Rotation) {
@@ -58,5 +61,30 @@ class TileLook(
             Rotation.RIGHT -> AreaCoordinate(cord.y, maxY - cord.x)
             Rotation.LEFT -> AreaCoordinate(maxX - cord.y, cord.x)
         }
+    }
+
+    fun hasShield(coord: AreaCoordinate): Boolean {
+        if (shields.isEmpty()) {
+            return false
+        }
+        val visited = mutableSetOf<AreaCoordinate>()
+        val toVisit = ArrayDeque(listOf(coord))
+        lateinit var curCoord: AreaCoordinate
+
+        while (toVisit.isNotEmpty()) {
+            curCoord = toVisit.removeFirst()
+            if (shields.contains(curCoord)) {
+                break
+            }
+            visited.add(curCoord)
+
+            Direction.entries.forEach { dir ->
+                val adjCoord = curCoord.getAdjacent(dir)
+                if (!visited.contains(adjCoord)) {
+                    toVisit.addLast(adjCoord)
+                }
+            }
+        }
+        return shields.contains(curCoord)
     }
 }

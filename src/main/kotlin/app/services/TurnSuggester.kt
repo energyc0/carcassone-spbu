@@ -33,16 +33,19 @@ class TurnSuggester(
         val suggest = mutableListOf<Vec2>()
 
         space.forEach { freeCoord ->
-            val hasValidConnection = freeCoord.getAdjacent().any { tileCoord ->
-                val toTile = board.getTile(tileCoord)
-                toTile != null && gameRules.havePossibleConnections(
-                    tile,
-                    toTile,
-                    tileCoord.getDirectionTo(freeCoord)
-                )
-            }
-            if (hasValidConnection)
+            val hasValidConnection =
+                freeCoord.getAdjacent().any { tileCoord ->
+                    val toTile = board.getTile(tileCoord)
+                    toTile != null &&
+                        gameRules.havePossibleConnections(
+                            tile,
+                            toTile,
+                            tileCoord.getDirectionTo(freeCoord),
+                        )
+                }
+            if (hasValidConnection) {
                 suggest.add(freeCoord)
+            }
         }
 
         return suggest.toList()

@@ -1,6 +1,12 @@
 package app.entities
 
+import app.context.GameBoard
+import app.entities.TileLook.Companion.MID_SAMPLE
 import app.services.GameObjectFactory
+import app.services.GameRules
+import app.utils.AreaCoordinate
+import app.utils.TILE_AREA_SAMPLES_TOTAL
+import app.utils.Vec2
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -20,13 +26,23 @@ internal class GameObjectTest {
     @Test
     @DisplayName("GameObjectTest initialization test")
     fun initTest() {
-        val city = GameObjectCity()
+        val city1 = GameObjectCity(true)
+        assert(city1.shieldsCount == 1)
+        val city2 = GameObjectCity(false)
+        assert(city2.shieldsCount == 0)
         val field = GameObjectField()
         val road = GameObjectRoad()
         val monastery = GameObjectMonastery()
 
-        val objList = listOf(city, field, road, monastery)
-        val typeList = listOf(GameObjectType.CITY, GameObjectType.FIELD, GameObjectType.ROAD, GameObjectType.MONASTERY)
+        val objList = listOf(city1, city2, field, road, monastery)
+        val typeList =
+            listOf(
+                GameObjectType.CITY,
+                GameObjectType.CITY,
+                GameObjectType.FIELD,
+                GameObjectType.ROAD,
+                GameObjectType.MONASTERY,
+            )
 
         objList.forEachIndexed { index, obj ->
             assert(!obj.hasMeeple())
@@ -34,7 +50,7 @@ internal class GameObjectTest {
         }
 
         GameObjectType.entries.forEach { type ->
-            assert(type == factory.createObject(type).type)
+            assert(type == factory.createObjectTest(type).type)
         }
     }
 
@@ -46,7 +62,7 @@ internal class GameObjectTest {
         GameObjectType.entries.forEach { type ->
             if (type == GameObjectType.CROSSROAD) return@forEach
 
-            val obj = factory.createObject(type) as GameObject
+            val obj = factory.createObjectTest(type) as GameObject
             obj.addMeep(meeple)
             assert(!meeple.isOnBoard())
             assert(obj.hasMeeple())
@@ -57,8 +73,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merged roads should calculate score based on total tiles")
     fun mergeScoreTest() {
-        val road1 = factory.createObject(GameObjectType.ROAD) as GameObject
-        val road2 = factory.createObject(GameObjectType.ROAD) as GameObject
+        val road1 = factory.createObjectTest(GameObjectType.ROAD) as GameObject
+        val road2 = factory.createObjectTest(GameObjectType.ROAD) as GameObject
         assertDoesNotThrow {
             road1.mergeWith(road2)
         }
@@ -70,8 +86,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merge two fields should combine correctly")
     fun meepleMergeTest() {
-        val field1 = factory.createObject(GameObjectType.FIELD) as GameObject
-        val field2 = factory.createObject(GameObjectType.FIELD) as GameObject
+        val field1 = factory.createObjectTest(GameObjectType.FIELD) as GameObject
+        val field2 = factory.createObjectTest(GameObjectType.FIELD) as GameObject
         val meeple = Meeple(Color.RED)
 
         field1.addMeep(meeple)
@@ -84,8 +100,8 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Merge different types should throw exception")
     fun differentTypeMergeTest() {
-        val road = factory.createObject(GameObjectType.ROAD) as GameObject
-        val field = factory.createObject(GameObjectType.FIELD) as GameObject
+        val road = factory.createObjectTest(GameObjectType.ROAD) as GameObject
+        val field = factory.createObjectTest(GameObjectType.FIELD) as GameObject
 
         assertThrows<IllegalArgumentException> {
             road.mergeWith(field)
@@ -95,7 +111,7 @@ internal class GameObjectTest {
     @Test
     @DisplayName("Chained merges should resolve to root parent")
     fun resolveParentTest() {
-        val roads = Array(5) { factory.createObject(GameObjectType.ROAD) as GameObject }
+        val roads = Array(5) { factory.createObjectTest(GameObjectType.ROAD) as GameObject }
         val meeple = Meeple(Color.RED)
 
         roads[0].addMeep(meeple)

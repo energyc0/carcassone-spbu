@@ -14,9 +14,9 @@ class GameRules : IGameRules {
         tile: Tile,
         to: Tile,
         from: Direction,
-    ) : Boolean {
+    ): Boolean {
         val connections = Direction.entries.map { dir -> tile.getConnectionType(dir) }
         val fromType = to.getConnectionType(from)
-        return connections.any() {fromType == it}
+        return connections.any { fromType == it }
     }
 }

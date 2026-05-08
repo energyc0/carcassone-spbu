@@ -29,5 +29,5 @@ interface IGameRules {
         tile: Tile,
         to: Tile,
         from: Direction,
-    ) : Boolean
+    ): Boolean
 }

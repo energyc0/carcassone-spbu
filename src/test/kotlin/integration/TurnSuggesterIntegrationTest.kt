@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 internal class TurnSuggesterIntegrationTest {
-
     private lateinit var gameBoard: GameBoard
     private lateinit var gameRules: GameRules
     private lateinit var turnSuggester: TurnSuggester
@@ -32,35 +31,41 @@ internal class TurnSuggesterIntegrationTest {
 
     // Helper functions to create different tile types
     private fun createHorizontalRoadTile(isStarting: Boolean = false): Tile {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) { i ->
-            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.y == MID_SAMPLE) {
-                GameObjectType.ROAD
-            } else {
-                GameObjectType.FIELD
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                if (coord.y == MID_SAMPLE) {
+                    GameObjectType.ROAD
+                } else {
+                    GameObjectType.FIELD
+                }
             }
-        }
         return Tile(TileLook(areas), isStarting)
     }
 
     private fun createVerticalRoadTile(isStarting: Boolean = false): Tile {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) { i ->
-            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.x == MID_SAMPLE) {
-                GameObjectType.ROAD
-            } else {
-                GameObjectType.FIELD
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                if (coord.x == MID_SAMPLE) {
+                    GameObjectType.ROAD
+                } else {
+                    GameObjectType.FIELD
+                }
             }
-        }
         return Tile(TileLook(areas), isStarting)
     }
 
     private fun createCityTile(isStarting: Boolean = false): Tile {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) {  i->
-            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            if (coord.y < MID_SAMPLE && 0 < coord.x && coord.x < TILE_AREA_SAMPLES - 1) GameObjectType.CITY
-            else GameObjectType.FIELD
-        }
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                if (coord.y < MID_SAMPLE && 0 < coord.x && coord.x < TILE_AREA_SAMPLES - 1) {
+                    GameObjectType.CITY
+                } else {
+                    GameObjectType.FIELD
+                }
+            }
         return Tile(TileLook(areas), isStarting)
     }
 
@@ -71,25 +76,27 @@ internal class TurnSuggesterIntegrationTest {
 
     /** Road from middle up to middle right */
     private fun createCornerRoadTile(isStarting: Boolean = false): Tile {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) { i ->
-            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            when {
-                coord.x == MID_SAMPLE && coord.y <= MID_SAMPLE -> GameObjectType.ROAD
-                coord.y == MID_SAMPLE && coord.x >= MID_SAMPLE -> GameObjectType.ROAD
-                else -> GameObjectType.FIELD
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                when {
+                    coord.x == MID_SAMPLE && coord.y <= MID_SAMPLE -> GameObjectType.ROAD
+                    coord.y == MID_SAMPLE && coord.x >= MID_SAMPLE -> GameObjectType.ROAD
+                    else -> GameObjectType.FIELD
+                }
             }
-        }
         return Tile(TileLook(areas), isStarting)
     }
 
     private fun createCrossroadTile(isStarting: Boolean = false): Tile {
-        val areas = Array(TILE_AREA_SAMPLES_TOTAL) { i ->
-            val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-            when {
-                coord.x == MID_SAMPLE || coord.y == MID_SAMPLE -> GameObjectType.ROAD
-                else -> GameObjectType.FIELD
+        val areas =
+            Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                when {
+                    coord.x == MID_SAMPLE || coord.y == MID_SAMPLE -> GameObjectType.ROAD
+                    else -> GameObjectType.FIELD
+                }
             }
-        }
         areas[MID_SAMPLE + MID_SAMPLE * TILE_AREA_SAMPLES] = GameObjectType.CROSSROAD
         return Tile(TileLook(areas), isStarting)
     }
@@ -199,14 +206,15 @@ internal class TurnSuggesterIntegrationTest {
     @DisplayName("Should handle tile placement near monastery")
     fun suggestTurnNearMonasteryTest() {
         fun createMonasteryTile(): Tile {
-            val areas = Array(TILE_AREA_SAMPLES_TOTAL) { i ->
-                val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
-                if (coord == AreaCoordinate(MID_SAMPLE, MID_SAMPLE)) {
-                    GameObjectType.MONASTERY
-                } else {
-                    GameObjectType.FIELD
+            val areas =
+                Array(TILE_AREA_SAMPLES_TOTAL) { i ->
+                    val coord = AreaCoordinate(i % TILE_AREA_SAMPLES, i / TILE_AREA_SAMPLES)
+                    if (coord == AreaCoordinate(MID_SAMPLE, MID_SAMPLE)) {
+                        GameObjectType.MONASTERY
+                    } else {
+                        GameObjectType.FIELD
+                    }
                 }
-            }
             return Tile(TileLook(areas), true)
         }
 
@@ -218,35 +226,52 @@ internal class TurnSuggesterIntegrationTest {
         val suggestions = turnSuggester.suggestTurn(fieldTile, gameBoard)
 
         assertEquals(4, suggestions.size)
-        assertTrue(suggestions.containsAll(listOf(
-            Vec2(1, 0), Vec2(-1, 0), Vec2(0, 1), Vec2(0, -1)
-        )))
+        assertTrue(
+            suggestions.containsAll(
+                listOf(
+                    Vec2(1, 0),
+                    Vec2(-1, 0),
+                    Vec2(0, 1),
+                    Vec2(0, -1),
+                ),
+            ),
+        )
     }
 
-    /* TODO: complete all coordinates */
     @Test
     @DisplayName("Should handle large board with holes correctly")
     fun suggestTurnWithHolesTest() {
         val fieldTile = createFieldTile(isStarting = true)
         gameBoard.insertTile(fieldTile, Vec2(0, 0))
 
-        val ringPositions = listOf(
-            Vec2(1, 0), Vec2(2, 0), Vec2(2, 1), Vec2(2, 2),
-            Vec2(1, 2), Vec2(0, 2), Vec2(-1, 2), Vec2(-1, 1),
-            Vec2(-1, 0), Vec2(-1, -1), Vec2(0, -1), Vec2(1, -1), Vec2(2, -1)
-        )
+        val ringPositions =
+            listOf(
+                Vec2(1, 0),
+                Vec2(2, 0),
+                Vec2(2, 1),
+                Vec2(2, 2),
+                Vec2(1, 2),
+                Vec2(0, 2),
+                Vec2(-1, 2),
+                Vec2(-1, 1),
+                Vec2(-1, 0),
+                Vec2(-1, -1),
+                Vec2(0, -1),
+                Vec2(1, -1),
+                Vec2(2, -1),
+            )
 
         ringPositions.forEach { pos ->
             gameBoard.insertTile(createFieldTile(), pos)
         }
 
-        val holePosition = Vec2(1, 1)
-        assertTrue(gameBoard.getFreeSpace().contains(holePosition))
+        val holePositions = listOf(Vec2(0, 1), Vec2(1, 1))
+        assertTrue(gameBoard.getFreeSpace().containsAll(holePositions))
 
         val connectingTile = createFieldTile()
 
         val suggestions = turnSuggester.suggestTurn(connectingTile, gameBoard)
 
-        assertTrue(suggestions.contains(holePosition))
+        assertTrue(suggestions.containsAll(holePositions))
     }
 }

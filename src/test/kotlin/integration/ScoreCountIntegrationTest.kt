@@ -2,6 +2,7 @@ package integration
 
 import app.context.GameBoard
 import app.entities.Color
+import app.entities.GameObjectCity
 import app.entities.GameObjectMonastery.Companion.MONASTERY_TOTAL_SCORE
 import app.entities.GameObjectType
 import app.entities.Meeple
@@ -72,7 +73,10 @@ internal class ScoreCountIntegrationTest {
             }
         }
 
-    private fun createCityTile(): Tile = Tile(TileLook(createCity()))
+    private fun createCityTile(shields: Set<AreaCoordinate> = setOf()): Tile =
+        Tile(
+            TileLook(createCity(), Rotation.STRAIGHT, shields),
+        )
 
     private fun createArrayWithHorizontalRoadCrossroad(): Array<GameObjectType> {
         val data = createArrayWithHorizontalRoad()
@@ -231,5 +235,56 @@ internal class ScoreCountIntegrationTest {
         // val finalScores = scoreCounter.countFinalScore(board)
         assertEquals(1, finalScores.size)
         assertEquals(3, finalScores[Color.BLUE])
+    }
+
+    @Test
+    @DisplayName("Test merge two cities with shields - count final score correctly")
+    fun mergeCityShieldsFinalScore() {
+        val cityData = Array(TILE_AREA_SAMPLES_TOTAL) { i -> GameObjectType.CITY }
+        val shield = setOf(AreaCoordinate(MID_SAMPLE, MID_SAMPLE))
+        val tile1 = Tile(TileLook(cityData, Rotation.STRAIGHT, shield))
+        val tile2 = Tile(TileLook(cityData, Rotation.STRAIGHT, shield))
+
+        val cityCoord1 = TileCoordinate(Vec2(0, 0), AreaCoordinate(0, 0))
+        board.insertTile(tile1, cityCoord1.tileCoord)
+        assert((board.getObject(cityCoord1) as GameObjectCity).shieldsCount == 1)
+
+        val cityCoord2 = TileCoordinate(Vec2(1, 0), AreaCoordinate(0, 0))
+        board.insertTile(tile2, cityCoord2.tileCoord)
+        board.setMeeple(Meeple(Color.GREEN), cityCoord2)
+        assert((board.getObject(cityCoord2) as GameObjectCity).shieldsCount == 2)
+
+        assert(scoreCounter.countScore(cityCoord2.tileCoord, board).isEmpty())
+        val finalScore = scoreCounter.countFinalScore(board)
+
+        assert(!finalScore.isEmpty())
+        assert(finalScore.size == 1)
+        // 2 points for shields, 2 points for tiles occupied
+        assert(finalScore[Color.GREEN] == 4)
+    }
+
+    @Test
+    @DisplayName("Test merge two cities with shields - count score correctly")
+    fun mergeCityShieldsScore() {
+        val shieldCoord = AreaCoordinate(MID_SAMPLE, 0)
+        val shield = setOf(shieldCoord)
+        val tile1 = createCityTile(shield)
+        val tile2 = createCityTile(shield)
+        tile2.setRotation(Rotation.FLIPPED)
+
+        val cityCoord1 = Vec2(0, 0)
+        board.insertTile(tile1, cityCoord1)
+
+        val cityCoord2 = Vec2(0, 1)
+        board.insertTile(tile2, cityCoord2)
+        val meepleCoord = AreaCoordinate(MID_SAMPLE, TILE_AREA_SAMPLES - 1)
+        board.setMeeple(Meeple(Color.GREEN), TileCoordinate(cityCoord2, meepleCoord))
+
+        val score = scoreCounter.countScore(cityCoord2, board)
+
+        assert(score.isNotEmpty())
+        assert(score.size == 1)
+        // 4 points for shields, 4 points for tiles occupied
+        assert(score[Color.GREEN] == 8)
     }
 }

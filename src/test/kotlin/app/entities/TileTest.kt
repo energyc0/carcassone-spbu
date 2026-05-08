@@ -31,8 +31,8 @@ internal class TileTest {
             val tile1 = Tile(TileLook(tileLookData), true)
             val tile2 = Tile(TileLook(tileLookData))
 
-            assert(tile1.coords == null && tile1.isStarting)
-            assert(tile2.coords == null && !tile2.isStarting)
+            assert(tile1.isStarting)
+            assert(!tile2.isStarting)
         }
     }
 

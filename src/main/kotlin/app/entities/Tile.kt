@@ -11,8 +11,9 @@ class Tile(
     private val tileLook: TileLook,
     val isStarting: Boolean = false,
 ) {
-
     fun getTileArea(cord: AreaCoordinate): GameObjectType = tileLook.getArea(cord)
+
+    fun hasShield(cord: AreaCoordinate): Boolean = tileLook.hasShield(cord)
 
     /**
      * Set given rotation for the TileLook.

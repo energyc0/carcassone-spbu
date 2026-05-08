@@ -29,12 +29,13 @@ class GameBoard(
      */
     private fun mergeObjects(
         startCoord: TileCoordinate,
-        objectType: GameObjectType,
+        startTile: Tile,
     ): GameObjectDummy {
-        val resultObjectDummy = GameObjectFactory().createObject(objectType)
+        val resultObjectDummy = GameObjectFactory().createObject(startTile, startCoord.areaCoord)
         gameObjects[startCoord.tileCoord]?.objects[startCoord.areaCoord] = resultObjectDummy
         // There may be CROSSROAD, need to check
         val resultObject = resultObjectDummy as? GameObject ?: return resultObjectDummy
+        val objectType = resultObject.type
         val visited = mutableSetOf<TileCoordinate>()
         val toVisit = ArrayDeque(listOf(startCoord))
         val objectSet = mutableSetOf(resultObject)
@@ -91,10 +92,9 @@ class GameBoard(
         for (x in 0..<TILE_AREA_SAMPLES) {
             for (y in 0..<TILE_AREA_SAMPLES) {
                 val areaCoord = AreaCoordinate(x, y)
-                val tileCoordinate = TileCoordinate(coordinate, areaCoord)
-                val type = newTile.getTileArea(areaCoord)
                 if (tileObjects[areaCoord] == null) {
-                    tileObjects[areaCoord] = mergeObjects(tileCoordinate, type)
+                    val tileCoordinate = TileCoordinate(coordinate, areaCoord)
+                    tileObjects[areaCoord] = mergeObjects(tileCoordinate, newTile)
                 }
             }
         }
@@ -111,7 +111,7 @@ class GameBoard(
                     val toTile =
                         gameObjects[curCoord]?.tile
                             ?: throw IllegalStateException("GameBoard cannot be empty.")
-                    val dir = curCoord.getDirection(coordinate)
+                    val dir = curCoord.getDirectionTo(coordinate)
                     gameRules.canConnect(newTile, toTile, dir)
                 }
         )

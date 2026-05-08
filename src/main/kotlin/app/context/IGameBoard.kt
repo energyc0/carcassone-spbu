@@ -10,15 +10,17 @@ import app.utils.Vec2
 
 interface IGameBoardRead {
     fun getObject(coord: TileCoordinate): GameObject?
-    fun getObjectDummy(coord: TileCoordinate): GameObjectDummy?
-    fun getObjectType(coord: TileCoordinate): GameObjectType?
-    fun getTile(coord: Vec2): Tile?
-    fun getFreeSpace(): List<Vec2>
 
+    fun getObjectDummy(coord: TileCoordinate): GameObjectDummy?
+
+    fun getObjectType(coord: TileCoordinate): GameObjectType?
+
+    fun getTile(coord: Vec2): Tile?
+
+    fun getFreeSpace(): List<Vec2>
 }
 
-interface IGameBoardReadWrite :
-    IGameBoardRead {
+interface IGameBoardReadWrite : IGameBoardRead {
     fun insertTile(
         newTile: Tile,
         coordinate: Vec2,

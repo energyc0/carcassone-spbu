@@ -132,7 +132,7 @@ abstract class GameObject(
         return result
     }
 
-    fun mergeWith(obj: GameObject) {
+    open fun mergeWith(obj: GameObject) {
         require(obj.type == type) { "Cannot merge GameObject`s of different type" }
         meeple.addAll(obj.meeple)
         tilesCountOccupied += obj.tilesCountOccupied
